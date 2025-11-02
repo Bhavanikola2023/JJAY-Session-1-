@@ -1,0 +1,2626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Roles Prompt Library</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #001a4d 0%, #003d99 50%, #0052cc 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #222;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            letter-spacing: 1px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .controls {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            animation: fadeIn 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .control-group label {
+            font-weight: 600;
+            color: #001a4d;
+            font-size: 0.95em;
+        }
+
+        input[type="text"],
+        select {
+            padding: 12px 15px;
+            border: 2px solid #0052cc;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: white;
+            color: #222;
+        }
+
+        input[type="text"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #003d99;
+            box-shadow: 0 0 0 3px rgba(0,82,204,0.1);
+            transform: scale(1.02);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        button {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #0052cc, #003d99);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,82,204,0.35);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .stats {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            font-size: 1.05em;
+            animation: fadeIn 0.8s ease-out 0.3s both;
+        }
+
+        .roles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 25px;
+            animation: fadeIn 0.8s ease-out 0.4s both;
+        }
+
+        .role-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .role-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0,82,204,0.25);
+        }
+
+        .role-header {
+            background: linear-gradient(135deg, #0052cc, #003d99);
+            color: white;
+            padding: 20px;
+            border-bottom: 4px solid #001a4d;
+        }
+
+        .role-number {
+            font-size: 0.85em;
+            opacity: 0.85;
+            margin-bottom: 5px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .role-title {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .role-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: rgba(255,255,255,0.25);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+
+        .complexity-advanced {
+            background: rgba(255,107,107,0.3);
+            border-color: rgba(255,107,107,0.6);
+        }
+
+        .complexity-intermediate {
+            background: rgba(255,193,7,0.3);
+            border-color: rgba(255,193,7,0.6);
+        }
+
+        .complexity-basic {
+            background: rgba(76,175,80,0.3);
+            border-color: rgba(76,175,80,0.6);
+        }
+
+        .role-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .brief-section {
+            background: #f5f7ff;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #0052cc;
+        }
+
+        .brief-label {
+            font-weight: 700;
+            color: #003d99;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .brief-text {
+            font-size: 0.95em;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        .metrics {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 10px 0;
+        }
+
+        .metric-item {
+            font-size: 0.9em;
+            color: #555;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .metric-dot {
+            color: #0052cc;
+            font-weight: bold;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .expand-button {
+            background: linear-gradient(135deg, #0052cc, #003d99);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: auto;
+        }
+
+        .expand-button:hover {
+            background: linear-gradient(135deg, #003d99, #001a4d);
+            transform: scale(1.02);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,26,77,0.7);
+            z-index: 1000;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #0052cc, #003d99);
+            color: white;
+            padding: 30px;
+            border-bottom: 4px solid #001a4d;
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 20px;
+        }
+
+        .modal-title {
+            flex: 1;
+        }
+
+        .modal-title h2 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+        }
+
+        .close-button {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .close-button:hover {
+            background: rgba(255,255,255,0.35);
+            transform: scale(1.1);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .prompt-version {
+            margin-bottom: 30px;
+            border: 2px solid #0052cc;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .version-header {
+            background: #f5f7ff;
+            padding: 15px 20px;
+            font-weight: 700;
+            color: #003d99;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .version-header:hover {
+            background: #e8ecff;
+        }
+
+        .version-toggle {
+            color: #0052cc;
+            font-weight: bold;
+            font-size: 1.3em;
+            transition: transform 0.3s ease;
+        }
+
+        .version-toggle.open {
+            transform: rotate(180deg);
+        }
+
+        .version-content {
+            display: none;
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .version-content.open {
+            display: block;
+        }
+
+        .section-header {
+            color: #003d99;
+            font-weight: 700;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-size: 1.05em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 12px;
+            color: #666;
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+
+            .controls {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                align-items: center;
+            }
+
+            .roles-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                max-height: 95vh;
+            }
+
+            .modal-header {
+                flex-direction: column;
+                padding: 20px;
+            }
+        }
+
+        .validation-status {
+            background: linear-gradient(135deg, #e8f4f8, #f5f7ff);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #0052cc;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #333;
+        }
+
+        .validation-item {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 5px;
+            align-items: flex-start;
+        }
+
+        .check-mark {
+            color: #0052cc;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 50px;
+            padding: 20px;
+            opacity: 0.9;
+        }
+
+        .search-highlight {
+            background: #fff3cd;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 Academic Roles Prompt Library</h1>
+            <p>Role-Specific, Platform-Optimized Prompts for Higher Education</p>
+        </header>
+
+        <div class="controls">
+            <div class="control-group">
+                <label for="searchInput">Search Roles</label>
+                <input type="text" id="searchInput" placeholder="Enter role name or keyword...">
+            </div>
+            <div class="control-group">
+                <label for="complexityFilter">Filter by Complexity</label>
+                <select id="complexityFilter">
+                    <option value="">All Complexity Levels</option>
+                    <option value="Basic">Basic</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                </select>
+            </div>
+            <div class="control-group button-group">
+                <button onclick="resetFilters()">Reset Filters</button>
+                <button onclick="toggleViewMode()">View Mode</button>
+            </div>
+        </div>
+
+        <div class="stats">
+            <span>Showing <strong id="rolesCount">16</strong> of <strong>16</strong> roles</span>
+        </div>
+
+        <div class="roles-grid" id="rolesGrid">
+            <!-- Roles will be populated here by JavaScript -->
+        </div>
+
+        <div id="noResults" class="no-results" style="display: none;">
+            No roles found matching your criteria. Try adjusting your filters.
+        </div>
+    </div>
+
+    <div class="modal" id="roleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h2 id="modalTitle"></h2>
+                    <div class="role-meta" id="modalMeta"></div>
+                </div>
+                <button class="close-button" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 Academic Roles Prompt Library | Complete Implementation in One File</p>
+    </footer>
+
+    <script>
+        const rolesData = [
+            {
+                id: 1,
+                title: "ACADEMIC STRATEGY & OPERATIONS",
+                complexity: "Advanced",
+                useCaseCategory: "Strategic Planning & Enrollment Forecasting",
+                brief: "Develop integrated strategic plans balancing academic mission, enrollment trends, and resource constraints",
+                outcome: "Comprehensive strategic roadmap with quarterly milestones and risk mitigation",
+                metrics: ["Plan adoption rate", "Enrollment variance <5%", "Stakeholder alignment score >85%"],
+                challenge: "Challenge: Develop integrated strategic plans balancing academic mission, enrollment trends, and resource constraints",
+                fullContent: `ACADEMIC STRATEGY & OPERATIONS
+Complexity: Advanced | Use Case: Strategic Planning & Enrollment Forecasting
+
+Challenge: Develop integrated strategic plans balancing academic mission, enrollment trends, and resource constraints
+Outcome: Comprehensive strategic roadmap with quarterly milestones and risk mitigation
+Metrics: Plan adoption rate, enrollment variance <5%, stakeholder alignment score >85%
+
+FOR CLAUDE - CHAIN OF THOUGHT:
+You are an academic strategist supporting institutional planning. Analyze the current state of [institution name] across three dimensions: (1) Academic Programs—review current offerings, demand trends, and competitive positioning; (2) Enrollment Dynamics—assess recruitment challenges, retention rates, and demographic shifts; (3) Resource Allocation—evaluate budget constraints, staffing levels, and facility utilization.
+
+For each dimension, identify the most critical constraint limiting growth. Then, working sequentially, propose interconnected strategies that address constraints without creating new bottlenecks. Show your reasoning at each step, including trade-offs between competing priorities.
+
+Deliverable: A 5-year strategic roadmap with quarterly milestones, resource requirements, and success indicators.
+
+FOR CLAUDE - TREE OF THOUGHT:
+You are an academic strategist. Develop a strategic plan for [institution name] by exploring multiple pathways:
+
+Path A: Growth-First Strategy—prioritize enrollment expansion through program innovation and market penetration
+Path B: Sustainability-First Strategy—optimize existing programs, reduce costs, strengthen retention
+Path C: Differentiation-First Strategy—develop niche academic strengths and market positioning
+
+For each path, evaluate: resource requirements, timeline, competitive advantage, risk level, and stakeholder alignment. Compare outcomes and identify which path(s) could be combined. Show trade-offs explicitly.
+
+Deliverable: Comparative analysis of strategic pathways with hybrid recommendations.
+
+FOR CLAUDE - ACTIONABLE PROMPT:
+Create a 5-year academic strategy for [institution name] addressing: enrollment goals, program portfolio adjustments, budget priorities, and stakeholder communication timeline. Include quarterly milestones and success metrics for each year.
+
+FOR CHATGPT - CHAIN OF THOUGHT:
+I need help creating an academic strategic plan. Here's our current situation: [describe enrollment trends, program performance, budget constraints]. 
+
+Step 1: Analyze what's working—which programs are strong and why?
+Step 2: Identify gaps—where are we losing competitiveness?
+Step 3: Resource reality—what can we actually invest in, and what might we need to sunset?
+Step 4: Develop phased priorities—what moves first, second, and third?
+Step 5: Create accountability—who owns what, and how do we measure progress?
+
+Please walk through each step and suggest a 12-month action plan.
+
+FOR CHATGPT - TREE OF THOUGHT:
+I'm developing a strategic plan for our institution. Let me explore different directions:
+
+If we focus on growth (adding programs and enrollment), what would that look like, and what are the risks?
+If we focus on optimization (strengthening what we have), what are the benefits and trade-offs?
+Could we do both? Where would the conflicts be?
+
+Please map out each scenario with pros, cons, and resource needs, then recommend which direction makes most sense for us.
+
+FOR CHATGPT - ACTIONABLE PROMPT:
+Based on [our current enrollment, programs, and budget], create a strategic plan with: annual enrollment targets, program changes, 3-year budget forecast, and quarterly milestones for the next 12 months.
+
+FOR GEMINI - CHAIN OF THOUGHT:
+Strategic Planning Module for [Institution]:
+
+INPUT: Current state data (enrollment trends, program mix, budget, staffing)
+
+ANALYSIS SEQUENCE:
+1. Program Performance Assessment—rank by enrollment, revenue, growth trajectory
+2. Market Positioning—competitive analysis against peer institutions
+3. Resource Constraints—identify limiting factors (budget, staffing, facilities)
+4. Dependency Mapping—which decisions affect others?
+5. Scenario Modeling—best case, realistic, conservative outcomes
+
+OUTPUT: Strategic roadmap with milestones, resource allocation, and contingencies
+
+FOR GEMINI - TREE OF THOUGHT:
+Strategic Pathway Analysis:
+
+EXPLORE: Growth vs. Optimization vs. Differentiation scenarios
+EVALUATE: Each pathway for resource intensity, timeline, risk, competitive positioning
+COMPARE: Outcomes across 5-year horizon
+SYNTHESIZE: Hybrid approach leveraging strongest elements
+
+OUTPUT: Comparative analysis with recommendation framework
+
+FOR GEMINI - ACTIONABLE PROMPT:
+Generate a strategic plan framework including: enrollment strategy, program portfolio decisions, resource allocation (by department and function), quarterly milestones, and KPIs for [Institution Name].
+
+FOR PERPLEXITY - CHAIN OF THOUGHT:
+Research and synthesize institutional strategic planning for [Institution Name]:
+
+1. LANDSCAPE RESEARCH: What are peer institutions doing? What are sector trends in [region/field]?
+2. INTERNAL ASSESSMENT: Our strengths, weaknesses, opportunities, threats (with current data verification)
+3. ENROLLMENT ANALYSIS: What programs are growing? What's declining? Why?
+4. RESOURCE IMPLICATIONS: What does our strategic direction cost, and where's the funding?
+5. COMPETITIVE POSITIONING: How do we differentiate?
+
+For each element, cite current data and trend sources. Synthesize into a strategic roadmap.
+
+FOR PERPLEXITY - TREE OF THOUGHT:
+Map strategic directions by exploring:
+- Growth pathways (which programs to expand, based on market data?)
+- Sustainability pathways (which programs to optimize or consolidate?)
+- Differentiation (what unique positioning can we claim, and is there market demand?)
+
+Research each pathway's feasibility using current institutional data, sector benchmarks, and enrollment trends. Compare outcomes.
+
+FOR PERPLEXITY - ACTIONABLE PROMPT:
+Using current enrollment data, market trends, and institutional capacity, create a 5-year strategic plan with: program expansion/consolidation recommendations, enrollment targets by program, budget requirements, and competitive positioning strategy.
+
+VALIDATION STATUS:
+✓ Role Alignment: Advanced strategy appropriate for C-level planning
+✓ Platform Fit: Claude (deep reasoning), ChatGPT (clarity), Gemini (structure), Perplexity (research)
+✓ Clarity: Outcomes measurable; metrics defined
+✓ Completeness: Addresses enrollment, programs, resources, and stakeholders
+✓ Reusability: Template adaptable to other institutions`
+            },
+            {
+                id: 2,
+                title: "SPACE MANAGEMENT",
+                complexity: "Intermediate",
+                useCaseCategory: "Facility Utilization Optimization",
+                brief: "Maximize facility utilization while balancing academic needs, student experience, and operational costs",
+                outcome: "Utilization dashboard and space optimization plan",
+                metrics: ["Utilization rate increase 10-15%", "Cost per sq ft reduction", "Space satisfaction >80%"],
+                challenge: "Challenge: Maximize facility utilization while balancing academic needs, student experience, and operational costs",
+                fullContent: `SPACE MANAGEMENT
+Complexity: Intermediate | Use Case: Facility Utilization Optimization
+
+Challenge: Maximize facility utilization while balancing academic needs, student experience, and operational costs
+Outcome: Utilization dashboard and space optimization plan
+Metrics: Utilization rate increase 10-15%, cost per sq ft reduction, space satisfaction >80%
+
+FOR CLAUDE - CHAIN OF THOUGHT:
+You are a facilities strategist optimizing space utilization. Examine current space allocation across: (1) Teaching Spaces—classrooms, labs, studios; (2) Collaborative Spaces—lounges, study areas, meeting rooms; (3) Administrative Spaces—offices, storage. 
+
+For each category, analyze utilization patterns (time-of-day usage, occupancy rates, scheduling conflicts). Identify underutilized spaces and over-pressured spaces. Then propose solutions sequentially: flexible furniture, scheduling optimization, shared spaces, repurposing. Show trade-offs and implementation sequence.
+
+Deliverable: 90-day space optimization roadmap with utilization targets and cost savings projections.
+
+FOR CLAUDE - TREE OF THOUGHT:
+You are a space optimization strategist. Explore three utilization pathways:
+
+Path A: Schedule Optimization—maximize existing spaces through smart scheduling
+Path B: Space Transformation—convert underutilized spaces to high-demand uses
+Path C: Technology Integration—implement booking systems and analytics to drive efficient use
+
+For each path, assess: implementation timeline, upfront costs, operational impact, and utilization gains. Show which combinations would work together.
+
+Deliverable: Comparative pathway analysis with phased implementation plan.
+
+FOR CLAUDE - ACTIONABLE PROMPT:
+Analyze current space utilization data [provide occupancy, scheduling, usage patterns] and recommend: (1) spaces to repurpose, (2) scheduling changes, (3) technology investments, (4) 90-day implementation priorities with cost/benefit for each.
+
+FOR CHATGPT - CHAIN OF THOUGHT:
+I need to optimize our space utilization. Here's what we have: [describe space inventory, current usage patterns, pressure points].
+
+Step 1: Where's the biggest inefficiency?—identify underused spaces and overcrowded times
+Step 2: What's driving it?—scheduling issues, poor visibility, inflexible design?
+Step 3: Quick wins—what can we fix in the next 30 days with minimal disruption?
+Step 4: Medium-term changes—what scheduling or space changes would help most?
+Step 5: Long-term strategy—should we physically reconfigure any spaces?
+
+Walk me through each step with specific recommendations.
+
+FOR CHATGPT - TREE OF THOUGHT:
+We're trying to improve space utilization. Let me think through options:
+
+What if we changed how we schedule classes and meetings? What would improve and what would break?
+What if we converted some underused spaces? Which ones make sense to transform?
+What if we added room booking technology? How would that shift usage patterns?
+
+Explore each scenario—what works, what's risky, what combinations make sense?
+
+FOR CHATGPT - ACTIONABLE PROMPT:
+Given our current space inventory [list key spaces], usage patterns [describe], and constraints [budget, timeline], recommend: (1) spaces to reconfigure, (2) scheduling improvements, (3) technology tools, (4) 60-day action plan with costs.
+
+FOR GEMINI - CHAIN OF THOUGHT:
+Space Utilization Optimization Module:
+
+INPUT: Facility inventory, occupancy data, scheduling patterns, utilization metrics
+
+ANALYSIS:
+1. Space Categorization—teaching, collaborative, administrative, support
+2. Utilization Metrics—occupancy rates, peak/off-peak analysis, underutilized spaces
+3. Demand Analysis—program growth, student needs, event requirements
+4. Constraint Mapping—budget, structural, regulatory limitations
+5. Optimization Pathways—scheduling, reconfiguration, technology, flexibility
+
+OUTPUT: Utilization improvement plan with priority interventions and 90-day roadmap
+
+FOR GEMINI - TREE OF THOUGHT:
+Optimization Pathway Exploration:
+
+PATHWAY 1: Scheduling efficiency
+PATHWAY 2: Space transformation
+PATHWAY 3: Technology enablement
+PATHWAY 4: Flexible/multi-use design
+
+COMPARE: Resource requirements, utilization gains, implementation timeline
+SYNTHESIZE: Recommended sequence and integration points
+
+FOR GEMINI - ACTIONABLE PROMPT:
+Create a space optimization plan for [Institution] including: utilization assessment, underutilized space recommendations, scheduling improvements, technology recommendations, and 90-day implementation roadmap with cost/benefit.
+
+FOR PERPLEXITY - CHAIN OF THOUGHT:
+Research facility utilization best practices and analyze institutional data:
+
+1. BENCHMARK RESEARCH: What's best-in-class utilization for higher ed spaces?
+2. DATA ANALYSIS: Our current utilization vs. benchmarks—where's the gap?
+3. PRACTICE RESEARCH: What solutions are peer institutions using?
+4. SOLUTION FEASIBILITY: Which practices fit our constraints and culture?
+5. IMPLEMENTATION: What's realistic for our timeline and budget?
+
+Research current industry standards, cite best practice data, and synthesize recommendations.
+
+FOR PERPLEXITY - TREE OF THOUGHT:
+Explore space optimization pathways:
+- Scheduling optimization: Research tools/approaches; assess our fit
+- Space transformation: What conversions work; peer examples?
+- Technology solutions: Room booking systems, analytics, impact data
+- Design flexibility: Multi-use spaces; successful models?
+
+Research each pathway's success rates, implementation costs, and outcomes. Recommend combination approach.
+
+FOR PERPLEXITY - ACTIONABLE PROMPT:
+Research best practices in higher ed space utilization and benchmarks. Then, given our facility data [provide], recommend: optimization priorities, technology investments, scheduling changes, and 6-month implementation plan with comparative analysis of alternatives.
+
+VALIDATION STATUS:
+✓ Role Alignment: Intermediate operational challenge with quantifiable outcomes
+✓ Platform Fit: Claude (strategic reasoning), ChatGPT (practical steps), Gemini (data analysis), Perplexity (benchmarking)
+✓ Clarity: Specific metrics and deliverables
+✓ Completeness: Covers assessment, options, and implementation
+✓ Reusability: Adaptable to different facility types`
+            },
+            {
+                id: 3,
+                title: "FACULTY WORKLOAD MANAGER",
+                complexity: "Intermediate",
+                useCaseCategory: "Workload Analysis & Equitable Distribution",
+                brief: "Analyze and equitably distribute faculty workload across teaching, research, service, and administrative duties",
+                outcome: "Workload assessment report and distribution recommendations",
+                metrics: ["Perceived fairness >80%", "Workload equity index", "Retention impact tracking"],
+                challenge: "Challenge: Analyze and equitably distribute faculty workload across teaching, research, service, and administrative duties",
+                fullContent: `FACULTY WORKLOAD MANAGER
+Complexity: Intermediate | Use Case: Workload Analysis & Equitable Distribution
+
+Challenge: Analyze and equitably distribute faculty workload across teaching, research, service, and administrative duties
+Outcome: Workload assessment report and distribution recommendations
+Metrics: Perceived fairness >80%, workload equity index, retention impact tracking
+
+FOR CLAUDE - CHAIN OF THOUGHT:
+You are a faculty workload analyst. Examine current workload distribution across: (1) Teaching Load—courses, student numbers, preps; (2) Research/Scholarship—expectations, support, time available; (3) Service—committee work, student advising, community engagement; (4) Administrative Duties—governance, assessment, hiring support.
+
+For each category, identify inequities: who carries disproportionate burden? Why? Then propose solutions sequentially: reassign underutilized roles, clarify expectations, provide support, implement accountability. Show how each solution affects retention, morale, and institutional effectiveness.
+
+Deliverable: Detailed workload audit and rebalancing plan with role-specific recommendations.
+
+FOR CLAUDE - TREE OF THOUGHT:
+You are a workload equity strategist. Explore three rebalancing approaches:
+
+Path A: Specialization Model—some faculty focus on teaching, others on research, clearer expectations
+Path B: Integration Model—all faculty share similar workload distributions across all categories
+Path C: Flexibility Model—faculty choose workload profiles within institutional needs
+
+For each path, evaluate: fairness, retention impact, institutional flexibility, and implementation complexity.
+
+Deliverable: Comparative analysis with recommended hybrid model.
+
+FOR CLAUDE - ACTIONABLE PROMPT:
+Conduct a faculty workload analysis using provided data [teaching load, research expectations, service commitments, administrative duties] and recommend: (1) current inequities, (2) rebalancing priorities, (3) new workload guidelines by rank, (4) implementation timeline and communication strategy.
+
+FOR CHATGPT - CHAIN OF THOUGHT:
+I need to address faculty workload concerns. Here's our current situation: [describe teaching loads, research expectations, service commitments, retention issues].
+
+Step 1: What's causing concern?—where do faculty feel overloaded or underutilized?
+Step 2: Where's the unfairness?—which roles/ranks carry unequal burden?
+Step 3: What can we measure?—define workload metrics (course load, hours, etc.)
+Step 4: What are options?—teaching load adjustments, service reductions, research support?
+Step 5: How do we implement?—communication, transition period, monitoring?
+
+Walk me through analysis and recommendations.
+
+FOR CHATGPT - TREE OF THOUGHT:
+We're trying to manage faculty workload fairly. Let me think through approaches:
+
+If we focused on teaching excellence (teaching-track model), who would benefit and what would break?
+If we maintained equal workload across all faculty, what would that require?
+Could some faculty specialize while others generalize? Where's the tension?
+
+Explore each model—what's fair, what's realistic, what combination works?
+
+FOR CHATGPT - ACTIONABLE PROMPT:
+Using our faculty data [course loads, committee assignments, research time], analyze workload distribution and recommend: (1) inequities by rank/role, (2) rebalancing priorities, (3) new workload guidelines, (4) transition plan with clear communication timeline.
+
+FOR GEMINI - CHAIN OF THOUGHT:
+Faculty Workload Analysis Module:
+
+INPUT: Faculty roster, course assignments, research commitments, service duties, administrative roles
+
+ANALYSIS SEQUENCE:
+1. Workload Categorization—teaching, research, service, admin by faculty member
+2. Equity Assessment—compare across rank, department, tenure status
+3. Capacity Analysis—sustainable vs. unsustainable loads
+4. Correlation Analysis—workload impact on retention, satisfaction, outcomes
+5. Rebalancing Options—reassignment, support, expectation clarification, flexibility
+
+OUTPUT: Workload audit and rebalancing recommendations with equity metrics
+
+FOR GEMINI - TREE OF THOUGHT:
+Workload Distribution Pathways:
+
+PATHWAY 1: Specialization (distinct roles with different workload profiles)
+PATHWAY 2: Equalization (consistent workload across faculty)
+PATHWAY 3: Flexibility (choice within institutional constraints)
+PATHWAY 4: Hybrid (combination approach)
+
+COMPARE: Equity, fairness perception, retention impact, institutional agility
+SYNTHESIZE: Recommended approach with implementation sequence
+
+FOR GEMINI - ACTIONABLE PROMPT:
+Analyze faculty workload data [provide roster, assignments, time allocation] and generate: workload equity assessment, current vs. recommended distribution, rebalancing plan by rank/department, and 6-month implementation roadmap.
+
+FOR PERPLEXITY - CHAIN OF THOUGHT:
+Research faculty workload equity practices and analyze institutional data:
+
+1. BENCHMARK RESEARCH: What are standard faculty workload expectations by rank and institution type?
+2. EQUITY RESEARCH: What fairness metrics do peer institutions use?
+3. DATA ANALYSIS: Our current workload vs. benchmarks and equity standards
+4. PRACTICE RESEARCH: How do high-retention institutions manage workload distribution?
+5. RECOMMENDATION: Synthesis of best practices adapted to our context
+
+Research current standards, cite equity frameworks, and synthesize recommendations.
+
+FOR PERPLEXITY - TREE OF THOUGHT:
+Explore workload management pathways:
+- Research-focused model: What does this require? Success examples?
+- Teaching-focused model: What's been tried? What works?
+- Flexible model: How do peer institutions implement choice? Outcomes?
+- Hybrid approaches: What combinations yield best retention and fairness?
+
+Research peer practices, success metrics, and implementation challenges. Recommend approach.
+
+FOR PERPLEXITY - ACTIONABLE PROMPT:
+Research faculty workload benchmarks by institutional type and rank, then analyze our data [provide faculty load details] to recommend: (1) how we compare to peers, (2) workload rebalancing priorities, (3) equity framework with clear metrics, (4) implementation approach with benchmarked outcomes.
+
+VALIDATION STATUS:
+✓ Role Alignment: Intermediate HR/operational challenge affecting retention
+✓ Platform Fit: Claude (deep equity analysis), ChatGPT (step-by-step assessment), Gemini (data modeling), Perplexity (benchmark research)
+✓ Clarity: Measurable equity and fairness metrics
+✓ Completeness: Covers assessment, models, and implementation
+✓ Reusability: Applicable to different institution types and sizes`
+            },
+            {
+                id: 4,
+                title: "ADJUNCT APPOINTMENT MANAGER",
+                complexity: "Intermediate",
+                useCaseCategory: "Staffing Strategy & Appointment Optimization",
+                brief: "Optimize adjunct staffing to meet course demand while controlling costs and ensuring instructor quality",
+                outcome: "Adjunct staffing model and appointment recommendations",
+                metrics: ["Cost per course reduction 5-10%", "Instructor retention >75%", "Course quality satisfaction >85%"],
+                challenge: "Challenge: Optimize adjunct staffing to meet course demand while controlling costs and ensuring instructor quality",
+                fullContent: `ADJUNCT APPOINTMENT MANAGER
+Complexity: Intermediate | Use Case: Staffing Strategy & Appointment Optimization
+
+Challenge: Optimize adjunct staffing to meet course demand while controlling costs and ensuring instructor quality
+Outcome: Adjunct staffing model and appointment recommendations
+Metrics: Cost per course reduction 5-10%, instructor retention >75%, course quality satisfaction >85%
+
+FOR CLAUDE - CHAIN OF THOUGHT:
+You are an adjunct staffing strategist. Examine current adjunct model across: (1) Course Demand—enrollment trends, course scheduling patterns; (2) Instructor Supply—available adjunct pool, qualifications, availability; (3) Cost Structure—compensation, benefits, overhead; (4) Quality Metrics—student evaluations, retention, course consistency.
+
+For each dimension, identify constraints and inefficiencies. Then propose optimization sequentially: streamline hiring, create appointment tracks, improve retention, better match skill to demand. Show cost-benefit and quality implications of each decision.
+
+Deliverable: Adjunct staffing optimization plan with role-tiering and appointment guidelines.
+
+FOR CLAUDE - TREE OF THOUGHT:
+You are an adjunct staffing strategist. Explore three staffing models:
+
+Path A: On-Demand Model—hire adjuncts course-by-course; flexibility, but high turnover
+Path B: Cohort Model—maintain stable core of returning adjuncts; better quality, less flexibility
+Path C: Hybrid Model—stable core for core courses, flexible adjuncts for variable demand
+
+For each model, evaluate: cost, quality consistency, instructor satisfaction, scheduling flexibility, and student outcomes.
+
+Deliverable: Comparative staffing model analysis with implementation roadmap.
+
+FOR CLAUDE - ACTIONABLE PROMPT:
+Analyze current adjunct staffing model [provide enrollment trends, current staffing, costs, quality metrics] and recommend: (1) staffing model (on-demand, cohort, or hybrid), (2) appointment tracks and compensation, (3) cost projections, (4) quality assurance measures, (5) implementation timeline.
+
+FOR CHATGPT - CHAIN OF THOUGHT:
+I'm managing adjunct staffing. Here's our current situation: [describe course demand, current adjunct pool, costs, quality concerns].
+
+Step 1: What's the real cost?—total compensation, benefits, hiring/training overhead
+Step 2: Who's working for us?—retention rate, performance patterns, subject areas
+Step 3: What's our demand?—which courses, when, how many sections?
+Step 4: Where's the mismatch?—overstaffed areas, understaffed areas, quality gaps
+Step 5: What model makes sense?—stable core, flexible pool, or mix?
+
+Walk me through the analysis with recommendations.
+
+FOR CHATGPT - TREE OF THOUGHT:
+We're rethinking adjunct staffing. Let me explore:
+
+What if we focused on hiring a stable core of great adjuncts? What would that cost and what would we gain?
+What if we hired course-by-course to maximize flexibility? What are the trade-offs?
+Could we do both—stable core plus flexible additions? Where would that work?
+
+Explore each approach—costs, quality, flexibility, sustainability.
+
+FOR CHATGPT - ACTIONABLE PROMPT:
+Develop an adjunct staffing strategy based on our course demand [provide], current staffing costs, and quality metrics [provide]. Recommend: staffing model, appointment guidelines, compensation structure, and 12-month implementation plan.
+
+FOR GEMINI - CHAIN OF THOUGHT:
+Adjunct Staffing Optimization Module:
+
+INPUT: Course demand data, current adjunct roster, cost structure, quality metrics
+
+ANALYSIS SEQUENCE:
+1. Demand Analysis—course schedule, enrollment projections, instructional needs
+2. Supply Assessment—adjunct availability, qualifications, performance history
+3. Cost Modeling—compensation, benefits, hiring, training, turnover costs
+4. Quality Analysis—student evaluations, course consistency, instructor feedback
+5. Model Comparison—on-demand vs. cohort vs. hybrid approaches
+
+OUTPUT: Staffing model recommendation with cost projections and quality assurance plan
+
+FOR GEMINI - TREE OF THOUGHT:
+Staffing Model Pathways:
+
+PATHWAY 1: On-Demand (course-by-course hiring)
+PATHWAY 2: Cohort (stable core adjuncts)
+PATHWAY 3: Hybrid (core + flexible)
+PATHWAY 4: Blended (mix with full-time faculty)
+
+COMPARE: Cost, quality, flexibility, instructor satisfaction, sustainability
+SYNTHESIZE: Recommended model with implementation sequence
+
+FOR GEMINI - ACTIONABLE PROMPT:
+Create an adjunct staffing model for [Institution] using: course demand data, current staffing, cost structure, and quality metrics. Deliver: recommended model, compensation guidelines, appointment process, cost projections, and 12-month implementation roadmap.
+
+FOR PERPLEXITY - CHAIN OF THOUGHT:
+Research adjunct staffing best practices and analyze institutional data:
+
+1. LANDSCAPE RESEARCH: What are peer institutions doing with adjunct staffing?
+2. COST RESEARCH: What are industry benchmarks for adjunct compensation and overhead?
+3. QUALITY RESEARCH: How do institutions maintain quality with adjunct-heavy models?
+4. DATA ANALYSIS: Our costs and quality vs. peer institutions and benchmarks
+5. RECOMMENDATION: Best practice synthesis adapted to our context
+
+Research current practices, cite benchmarked costs, and synthesize recommendations.
+
+FOR PERPLEXITY - TREE OF THOUGHT:
+Explore adjunct staffing approaches:
+- On-demand model: Cost-effective but what quality trade-offs? Peer examples?
+- Cohort model: Higher costs but what quality benefits? Retention data?
+- Hybrid approaches: How do successful institutions combine approaches? Outcomes?
+- New models: Apprenticeships, part-time to full-time pathways? Success cases?
+
+Research peer practices, cost data, quality metrics, and recommend approach.
+
+FOR PERPLEXITY - ACTIONABLE PROMPT:
+Research higher ed adjunct staffing models and benchmarked costs. Then, given our enrollment and staffing data [provide], recommend: (1) optimal staffing model, (2) how we compare to peer costs/quality, (3) compensation guidelines, (4) cost vs. quality trade-offs, (5) implementation roadmap with benchmarked metrics.
+
+VALIDATION STATUS:
+✓ Role Alignment: Intermediate staffing and budget optimization
+✓ Platform Fit: Claude (strategic modeling), ChatGPT (cost analysis), Gemini (data comparison), Perplexity (benchmarking)
+✓ Clarity: Measurable cost and quality metrics
+✓ Completeness: Covers staffing models, costs, quality, and implementation
+✓ Reusability: Adaptable across disciplines and institution types`
+            },
+            {
+                id: 5,
+                title: "PART-TIME STAFF ONBOARDING MANAGER",
+                complexity: "Basic",
+                useCaseCategory: "Process Optimization & Documentation",
+                brief: "Create efficient, consistent onboarding process for part-time staff across departments",
+                outcome: "Standardized onboarding checklist and documentation",
+                metrics: ["Onboarding time reduction 20-30%", "Staff satisfaction >80%", "Compliance 100%"],
+                challenge: "Challenge: Create efficient, consistent onboarding process for part-time staff across departments",
+                fullContent: `PART-TIME STAFF ONBOARDING MANAGER
+Complexity: Basic | Use Case: Process Optimization & Documentation
+
+Challenge: Create efficient, consistent onboarding process for part-time staff across departments
+Outcome: Standardized onboarding checklist and documentation
+Metrics: Onboarding time reduction 20-30%, staff satisfaction >80%, compliance 100%
+
+FOR CLAUDE - CHAIN OF THOUGHT:
+You are an onboarding process specialist. Examine current part-time onboarding across: (1) Pre-Arrival—communications, paperwork, system access; (2) Day One—orientation, introductions, workspace setup; (3) First Week—department integration, role clarity, training; (4) First Month—competency confirmation, feedback, retention check.
+
+For each phase, identify what's working and what's failing. Then build a standardized checklist sequentially: clear handoffs between hiring manager and HR, department-specific add-ons, consistency measures. Show how consistency reduces time and improves retention.
+
+Deliverable: Comprehensive onboarding checklist with role-specific variations and 30-day tracking.
+
+FOR CLAUDE - TREE OF THOUGHT:
+You are an onboarding designer. Explore three process approaches:
+
+Path A: Centralized—HR owns all onboarding; consistent but potentially one-size-fits-all
+Path B: Decentralized—departments own onboarding; flexible but inconsistent
+Path C: Hybrid—HR core process plus department customization
+
+For each approach, evaluate: consistency, speed, staff experience, and scalability.
+
+Deliverable: Recommended hybrid process with phased rollout.
+
+FOR CLAUDE - ACTIONABLE PROMPT:
+Create a standardized onboarding process for part-time staff including: pre-arrival checklist, day-one agenda, first-week training, first-month evaluation. Include role-specific variations [if applicable], compliance requirements, and tracking method.
+
+FOR CHATGPT - CHAIN OF THOUGHT:
+I need to streamline part-time staff onboarding. Here's what we're currently doing: [describe current process, pain points, inconsistencies].
+
+Step 1: What works now?—identify effective elements worth keeping
+Step 2: What's broken?—where do things slow down or get missed?
+Step 3: What's the ideal flow?—from offer to first day to first month?
+Step 4: What needs to be standard?—policies, access, compliance, training?
+Step 5: What can be customized?—department-specific elements, role variations?
+
+Create a step-by-step improved process.
+
+FOR CHATGPT - TREE OF THOUGHT:
+We're redesigning onboarding. Let me think through:
+
+What if HR owned the entire process? Pros, cons, and what we'd need?
+What if departments owned their own onboarding? Benefits and risks?
+Could we balance both? HR handles core, departments customize?
+
+Explore each option and recommend the best approach.
+
+FOR CHATGPT - ACTIONABLE PROMPT:
+Create a streamlined onboarding process for part-time staff with: pre-arrival checklist, day-one schedule, first-week training plan, first-month evaluation, and role-specific customizations [if applicable]. Include compliance checkpoints.
+
+FOR GEMINI - CHAIN OF THOUGHT:
+Part-Time Staff Onboarding Process Module:
+
+INPUT: Current onboarding practices, compliance requirements, department variations
+
+PROCESS DESIGN:
+1. Phase Breakdown—pre-arrival, day one, first week, first month
+2. Touchpoint Mapping—who's responsible, what's communicated, when
+3. Compliance Checklist—regulatory and institutional requirements
+4. Role Customization—variations by function
+5. Success Metrics—time to productivity, retention, satisfaction
+
+OUTPUT: Standardized onboarding checklist with implementation guide
+
+FOR GEMINI - TREE OF THOUGHT:
+Process Design Pathways:
+
+PATHWAY 1: Centralized (HR-led consistency)
+PATHWAY 2: Decentralized (department flexibility)
+PATHWAY 3: Hybrid (core standardization + customization)
+PATHWAY 4: Technology-enabled (system-driven consistency)
+
+COMPARE: Consistency, speed, scalability, user experience
+RECOMMEND: Hybrid approach with phased implementation
+
+FOR GEMINI - ACTIONABLE PROMPT:
+Design a standardized onboarding process for part-time staff including: timeline (pre-arrival through day 30), checklist by phase, compliance requirements, department variations, and success tracking metrics.
+
+FOR PERPLEXITY - CHAIN OF THOUGHT:
+Research onboarding best practices and analyze institutional approach:
+
+1. BEST PRACTICE RESEARCH: What's standard in higher ed for part-time staff onboarding?
+2. COMPLIANCE RESEARCH: What regulatory and institutional requirements must be met?
+3. CURRENT STATE ANALYSIS: How does our onboarding compare to best practices?
+4. GAP IDENTIFICATION: Where are we missing elements?
+5. RECOMMENDATION: Synthesize best practices into recommended process
+
+Research current standards and synthesize recommendations.
+
+FOR PERPLEXITY - TREE OF THOUGHT:
+Explore onboarding approaches:
+- Centralized vs. decentralized: Pros/cons, peer examples?
+- Digital vs. paper-based: Technology options, effectiveness data?
+- Generic vs. role-specific: Best practice balance?
+- Tracking methods: What works for compliance and improvement?
+
+Research approaches and recommend best-fit solution.
+
+FOR PERPLEXITY - ACTIONABLE PROMPT:
+Research best practices in part-time staff onboarding for higher ed institutions. Then design a process for [Institution] that includes: timeline, checklist, compliance requirements, variations by role, technology recommendations, and success metrics. Reference best-practice standards.
+
+VALIDATION STATUS:
+✓ Role Alignment: Basic operational process optimization
+✓ Platform Fit: Claude (comprehensive design), ChatGPT (step-by-step), Gemini (checklist structure), Perplexity (best practice)
+✓ Clarity: Specific deliverables and checkpoints
+✓ Completeness: Covers all onboarding phases and variations
+✓ Reusability: Template adaptable across departments`
+            },
+            {
+                id: 6,
+                title: "BUDGET & OPERATIONS MANAGER",
+                complexity: "Advanced",
+                useCaseCategory: "Financial Forecasting & Resource Allocation",
+                brief: "Develop multi-year financial forecasts and optimize resource allocation across competing priorities",
+                outcome: "3-year budget model with scenario analysis and allocation framework",
+                metrics: ["Budget variance <3%", "Resource utilization >85%", "Stakeholder agreement >80%"],
+                challenge: "Challenge: Develop multi-year financial forecasts and optimize resource allocation across competing priorities",
+                fullContent: `BUDGET & OPERATIONS MANAGER
+Complexity: Advanced | Use Case: Financial Forecasting & Resource Allocation
+
+Challenge: Develop multi-year financial forecasts and optimize resource allocation across competing priorities
+Outcome: 3-year budget model with scenario analysis and allocation framework
+Metrics: Budget variance <3%, resource utilization >85%, stakeholder agreement >80%
+
+FOR CLAUDE - CHAIN OF THOUGHT:
+You are a budget strategist supporting institutional financial planning. Examine: (1) Revenue Streams—enrollment-driven revenue, grants, philanthropic support, ancillary income; (2) Cost Structure—salary & benefits, facilities, technology, supplies; (3) Constraints—enrollment variability, expense growth, capital needs; (4) Strategic Priorities—institutional goals requiring investment.
+
+For each element, identify trends and vulnerabilities. Build the forecast sequentially: model base case, identify risks, stress-test scenarios (enrollment decline, expense increases, priority changes). Show assumptions, trade-offs, and decision points clearly.
+
+Deliverable: 3-year budget forecast with base case, stress-test scenarios, and resource allocation framework.
+
+FOR CLAUDE - TREE OF THOUGHT:
+You are a financial strategist. Develop budget frameworks by exploring three scenarios:
+
+Scenario A: Growth Case—enrollment rises, revenue increases, strategic investments possible
+Scenario B: Stability Case—enrollment stable, tight cost management, selective investments
+Scenario C: Decline Case—enrollment pressure, revenue decline, cost reductions necessary
+
+For each scenario, map: revenue assumptions, cost implications, which strategic priorities survive, where trade-offs occur.
+
+Deliverable: Scenario-based budget model with decision triggers for scenario shifts.
+
+FOR CLAUDE - ACTIONABLE PROMPT:
+Create a 3-year budget forecast for [Institution] using: current budget, enrollment trends, cost projections, and strategic priorities [list]. Deliver: base-case budget, growth scenario, decline scenario, resource allocation framework, and decision triggers.
+
+FOR CHATGPT - CHAIN OF THOUGHT:
+I need to build a multi-year budget. Here's our situation: [describe current budget, revenue sources, major expenses, enrollment trends, strategic priorities].
+
+Step 1: What's our baseline?—document current budget structure and trends
+Step 2: What's stable, what's changing?—identify fixed vs. variable costs, enrollment trajectory
+Step 3: What are we trying to do?—what strategic investments matter? What about cost control?
+Step 4: What could go wrong?—list risks (enrollment drop, expense increase, funding loss)
+Step 5: What scenarios matter?—build best case, realistic case, worst case
+
+Walk me through each scenario with specific numbers.
+
+FOR CHATGPT - TREE OF THOUGHT:
+Building a multi-year budget. Let me think through scenarios:
+
+What if enrollment grows as projected? What investments become possible? What becomes risky?
+What if enrollment stays flat? Where do we have to cut? What becomes impossible?
+What if enrollment drops 10%? What's not negotiable? Where do we find cuts?
+
+Model each scenario and the connections between them.
+
+FOR CHATGPT - ACTIONABLE PROMPT:
+Develop a 3-year budget model for [Institution] with: current-year baseline, revenue projections by source, cost analysis, scenario modeling (growth/stable/decline), resource allocation priorities, and contingency plan. Use provided data [enrollment, budget, costs].
+
+FOR GEMINI - CHAIN OF THOUGHT:
+Budget Forecasting Module:
+
+INPUT: Current budget, revenue streams, expense structure, enrollment trends, strategic priorities
+
+ANALYSIS SEQUENCE:
+1. Revenue Modeling—by source, trends, growth/decline drivers
+2. Expense Analysis—fixed/variable, growth trends, controllable/uncontrollable
+3. Constraint Mapping—regulatory, strategic, competitive limitations
+4. Scenario Modeling—growth, stable, decline cases with assumptions
+5. Allocation Framework—priority matrix for investment and cost management
+
+OUTPUT: 3-year forecast with scenario analysis and allocation guidelines
+
+FOR GEMINI - TREE OF THOUGHT:
+Budget Scenarios:
+
+SCENARIO 1: Growth (enrollment up, revenue up, investment possible)
+SCENARIO 2: Stable (enrollment steady, tight management, selective investment)
+SCENARIO 3: Decline (enrollment down, revenue pressure, cost reduction)
+SCENARIO 4: Hybrid (growth in some areas, decline in others)
+
+MODEL: Implications, trade-offs, allocation priorities for each
+SYNTHESIZE: Decision framework for scenario management
+
+FOR GEMINI - ACTIONABLE PROMPT:
+Create a 3-year budget model for [Institution] including: revenue projection by source, expense forecasting, scenario modeling (growth/stable/decline), resource allocation framework, contingency plans, and quarterly decision triggers.
+
+FOR PERPLEXITY - CHAIN OF THOUGHT:
+Research budget trends and best practices, then analyze institutional data:
+
+1. SECTOR RESEARCH: What are budget trends in higher ed? Revenue volatility? Cost pressures?
+2. PEER ANALYSIS: How do peer institutions forecast and manage budgets?
+3. BENCHMARK RESEARCH: What's standard for budget contingencies and scenario planning?
+4. DATA ANALYSIS: Our revenue/expense structure vs. peer institutions and sector trends
+5. RECOMMENDATION: Best practice synthesis adapted to institutional context
+
+Research sector trends and synthesize recommendations.
+
+FOR PERPLEXITY - TREE OF THOUGHT:
+Explore budget planning approaches:
+- Scenario-based vs. fixed budgeting: Effectiveness, adoption rates?
+- Rolling forecasts vs. fixed annual: Flexibility benefits? Best practice?
+- Zero-based vs. incremental: Pros/cons in higher ed context?
+- Contingency frameworks: What % reserve? What triggers adjustments?
+
+Research practices and recommend approach aligned with sector trends.
+
+FOR PERPLEXITY - ACTIONABLE PROMPT:
+Research higher ed budget best practices and current sector trends. Then, using our budget data [provide], create a 3-year forecast with: scenario modeling (growth/stable/decline), allocation framework based on institutional priorities, contingency planning, and benchmarked comparison to peer institutions.
+
+VALIDATION STATUS:
+✓ Role Alignment: Advanced financial strategy and decision-making
+✓ Platform Fit: Claude (complex scenario modeling), ChatGPT (narrative walkthrough), Gemini (data structure), Perplexity (benchmarking)
+✓ Clarity: Quantified scenarios and decision triggers
+✓ Completeness: Covers revenue, expenses, scenarios, and allocation
+✓ Reusability: Framework adaptable to different institution sizes`
+            },
+            {
+                id: 7,
+                title: "EXECUTIVE ADMIN TO PROVOST",
+                complexity: "Intermediate",
+                useCaseCategory: "Stakeholder Communication & Meeting Management",
+                brief: "Optimize Provost communication and decision-making processes across multiple stakeholder groups",
+                outcome: "Communication framework and meeting management system",
+                metrics: ["Stakeholder satisfaction >85%", "Decision clarity >80%", "Meeting efficiency improvement 25%"],
+                challenge: "Challenge: Optimize Provost communication and decision-making processes across multiple stakeholder groups",
+                fullContent: `EXECUTIVE ADMIN TO PROVOST
+Complexity: Intermediate | Use Case: Stakeholder Communication & Meeting Management
+
+Challenge: Optimize Provost communication and decision-making processes across multiple stakeholder groups
+Outcome: Communication framework and meeting management system
+Metrics: Stakeholder satisfaction >85%, decision clarity >80%, meeting efficiency improvement 25%
+
+FOR CLAUDE - CHAIN OF THOUGHT:
+You are a communication strategist supporting executive leadership. Examine Provost communication needs: (1) Upward (President, Board)—strategic direction, performance, risks; (2) Lateral (Peer leaders)—coordination, shared priorities; (3) Downward (Faculty, staff)—policy, decisions, vision; (4) External (Accreditors, community)—reputation, accountability.
+
+For each stakeholder group, identify communication frequency, format, key information needs. Then design sequentially: core messages, communication cadence, formats (emails, meetings, reports), feedback loops. Show how to ensure consistency across audiences while customizing for each.
+
+Deliverable: Executive communication framework with templates, calendars, and escalation protocols.
+
+FOR CLAUDE - TREE OF THOUGHT:
+You are an executive communication designer. Explore three communication models:
+
+Path A: Centralized Hub—Provost communicates broadly; consistency, but slow
+Path B: Distributed Network—different leaders communicate to different groups; fast, but fragmented
+Path C: Coordinated Hub—Provost manages core messages; others amplify appropriately
+
+For each model, evaluate: consistency, speed, stakeholder satisfaction, and information flow.
+
+Deliverable: Recommended communication model with implementation guide.
+
+FOR CLAUDE - ACTIONABLE PROMPT:
+Design a Provost communication framework addressing: key stakeholder groups [list], communication frequency and format by group, core messages, meeting management system, decision documentation, and escalation protocols. Include templates and calendars.
+
+FOR CHATGPT - CHAIN OF THOUGHT:
+I support the Provost and need to improve communication. Here's the challenge: [describe communication problems, stakeholder confusion, meeting overload, unclear decisions].
+
+Step 1: Who needs to communicate what?—map stakeholders and their information needs
+Step 2: What's working? What's not?—current communication strengths and failures
+Step 3: How often should we communicate?—meeting/email frequency by audience
+Step 4: What formats work best?—emails, meetings, reports, dashboards—what for each audience?
+Step 5: How do we track decisions?—documentation, accountability, follow-up system?
+
+Create a communication improvement plan.
+
+FOR CHATGPT - TREE OF THOUGHT:
+Improving Provost communication. Let me think through:
+
+What if we focused on fewer, more focused meetings? Who participates, what gets decided, what gets documented?
+What if we created a communication calendar? How do we balance consistency with flexibility?
+What if we assigned communication owners? Who ensures upward, lateral, downward, external communication?
+
+Explore options and recommend integrated approach.
+
+FOR CHATGPT - ACTIONABLE PROMPT:
+Create a communication and meeting management system for the Provost including: stakeholder groups and their information needs, recommended meeting calendar and frequency, communication templates, decision documentation process, and implementation timeline.
+
+FOR GEMINI - CHAIN OF THOUGHT:
+Executive Communication System Module:
+
+INPUT: Stakeholder groups, communication needs, current meeting/communication patterns
+
+DESIGN SEQUENCE:
+1. Stakeholder Mapping—groups, information needs, frequency, format
+2. Message Framework—core priorities, key messages for each audience
+3. Meeting Architecture—types, frequency, participants, decision frameworks
+4. Communication Calendar—planned communications, decision points, reviews
+5. Documentation & Accountability—how decisions are captured, tracked, communicated
+
+OUTPUT: Executive communication framework with templates, calendars, and implementation guide
+
+FOR GEMINI - TREE OF THOUGHT:
+Communication System Pathways:
+
+PATHWAY 1: Centralized (Provost as hub; consistency-focused)
+PATHWAY 2: Distributed (Multiple communication streams; agility-focused)
+PATHWAY 3: Coordinated (Hub + amplifiers; balance approach)
+PATHWAY 4: Integrated (System approach with technology enablement)
+
+COMPARE: Consistency, speed, stakeholder satisfaction, scalability
+RECOMMEND: Best-fit model with implementation sequence
+
+FOR GEMINI - ACTIONABLE PROMPT:
+Design a Provost communication and meeting management system including: stakeholder mapping and communication requirements, meeting architecture and calendar, core message framework, decision documentation process, and implementation roadmap.
+
+FOR PERPLEXITY - CHAIN OF THOUGHT:
+Research executive communication best practices and analyze current approach:
+
+1. BEST PRACTICE RESEARCH: What communication frameworks do top-performing institutions use?
+2. STAKEHOLDER RESEARCH: Best practices for managing upward, lateral, downward, external communication
+3. TECHNOLOGY RESEARCH: Tools and systems supporting executive communication
+4. CURRENT STATE ANALYSIS: How effective is our current communication?
+5. RECOMMENDATION: Best practices synthesis adapted to context
+
+Research best practices and synthesize recommendations.
+
+FOR PERPLEXITY - TREE OF THOUGHT:
+Explore communication approaches:
+- Meeting culture: Optimal meeting frequency/types? Best-practice examples?
+- Communication cadence: How often and what formats? Peer institution models?
+- Decision frameworks: How do leaders document and communicate decisions?
+- Technology enablement: Tools for communication management, documentation, tracking?
+
+Research approaches and recommend integrated system.
+
+FOR PERPLEXITY - ACTIONABLE PROMPT:
+Research executive communication best practices in higher ed. Then design a Provost communication system including: stakeholder communication strategy, meeting architecture based on best practices, decision documentation approach, communication templates, and implementation roadmap. Reference best-practice standards.
+
+VALIDATION STATUS:
+✓ Role Alignment: Intermediate executive support and communication
+✓ Platform Fit: Claude (framework design), ChatGPT (practical systems), Gemini (structured templates), Perplexity (best practice)
+✓ Clarity: Measurable communication and decision outcomes
+✓ Completeness: Covers all stakeholder groups and communication types
+✓ Reusability: Framework adaptable to different leadership contexts`
+            },
+            {
+                id: 8,
+                title: "SPECIAL PROJECTS FOR PROVOST",
+                complexity: "Advanced",
+                useCaseCategory: "Project Management & Complex Problem-Solving",
+                brief: "Lead complex, strategic projects spanning multiple departments with ambiguous scope",
+                outcome: "Project charter, governance framework, and execution plan",
+                metrics: ["On-time delivery 90%", "Stakeholder satisfaction >85%", "Objective completion 100%"],
+                challenge: "Challenge: Lead complex, strategic projects spanning multiple departments with ambiguous scope",
+                fullContent: `SPECIAL PROJECTS FOR PROVOST
+Complexity: Advanced | Use Case: Project Management & Complex Problem-Solving
+
+Challenge: Lead complex, strategic projects spanning multiple departments with ambiguous scope
+Outcome: Project charter, governance framework, and execution plan
+Metrics: On-time delivery 90%, stakeholder satisfaction >85%, objective completion 100%
+
+FOR CLAUDE - CHAIN OF THOUGHT:
+You are a strategic project manager. You've been asked to lead [project name/type]. Define the project by examining: (1) Objectives—what's the core problem, the desired end state? (2) Stakeholders—who's affected, who decides, who implements? (3) Scope—what's in, what's out, where's ambiguity? (4) Constraints—timeline, budget, political, cultural.
+
+Build the project plan sequentially: clarify objectives with stakeholders, map dependencies across departments, identify risks and assumptions, define governance. Show how ambiguity gets resolved, decisions get made, and accountability is maintained.
+
+Deliverable: Project charter with stakeholder analysis, governance framework, detailed execution plan, and risk register.
+
+FOR CLAUDE - TREE OF THOUGHT:
+You are a strategic project strategist. Explore three project approaches:
+
+Path A: Rapid Prototyping—get to MVP quickly, iterate with feedback, maintain flexibility
+Path B: Comprehensive Planning—full upfront analysis, detailed execution, controlled risk
+Path C: Agile Hybrid—structured phases, clear milestones, continuous refinement
+
+For each approach, evaluate: time to value, stakeholder confidence, flexibility, and risk management.
+
+Deliverable: Recommended approach with phase breakdown and decision gates.
+
+FOR CLAUDE - ACTIONABLE PROMPT:
+Create a project plan for [Project] including: problem statement and objectives, stakeholder analysis and governance, scope definition (in/out), timeline and major milestones, resource requirements, budget estimate, risk register, and success metrics. Identify critical decisions and assumption-testing opportunities.
+
+FOR CHATGPT - CHAIN OF THOUGHT:
+I've been asked to lead a strategic project: [describe project briefly, why it matters, stakeholders involved].
+
+Step 1: What's really being asked?—beyond the stated goal, what's the core objective?
+Step 2: Who cares and why?—which stakeholders are affected, what do they need?
+Step 3: What's in or out?—define scope clearly to avoid creep and confusion
+Step 4: What could go wrong?—list risks (scope creep, stakeholder misalignment, resource gaps)
+Step 5: How do we run this?—who decides, who implements, how do we track progress?
+
+Create a detailed project plan.
+
+FOR CHATGPT - TREE OF THOUGHT:
+Leading a strategic project. Let me think through:
+
+What if we move fast to build momentum? Benefits and risks?
+What if we plan comprehensively first? What does that buy us?
+Could we do both? Structure with flexibility?
+
+Map the approach and timeline.
+
+FOR CHATGPT - ACTIONABLE PROMPT:
+Develop a project plan for [Project] including: clear objectives, stakeholder analysis with role definitions, scope (what's in, what's out), timeline and major milestones, resources needed, budget estimate, risk register, governance/decision framework, and success metrics.
+
+FOR GEMINI - CHAIN OF THOUGHT:
+Strategic Project Management Module:
+
+INPUT: Project description, objectives, stakeholders, constraints, context
+
+PLANNING SEQUENCE:
+1. Objective Clarification—core problem, desired outcome, success definition
+2. Stakeholder Analysis—who's affected, their priorities, decision roles
+3. Scope Definition—in/out, boundaries, assumption clarity
+4. Dependency Mapping—cross-functional elements, sequencing, bottlenecks
+5. Governance Framework—decision rights, escalation, communication, tracking
+6. Execution Plan—phases, milestones, resources, timeline, budget, risks
+
+OUTPUT: Project charter with execution roadmap and governance
+
+FOR GEMINI - TREE OF THOUGHT:
+Project Approach Pathways:
+
+PATHWAY 1: Rapid (quick MVP, iterate)
+PATHWAY 2: Comprehensive (detailed planning, controlled delivery)
+PATHWAY 3: Agile (structured phases, continuous learning)
+PATHWAY 4: Hybrid (best elements of multiple approaches)
+
+MODEL: Timeline, stakeholder confidence, flexibility, risk for each
+RECOMMEND: Best-fit approach with decision gates
+
+FOR GEMINI - ACTIONABLE PROMPT:
+Create a comprehensive project plan for [Project] including: problem/objective definition, stakeholder analysis and governance, scope definition, phase breakdown, timeline and milestones, resource and budget requirements, risk register, success metrics, and decision framework.
+
+FOR PERPLEXITY - CHAIN OF THOUGHT:
+Research strategic project management best practices and analyze project requirements:
+
+1. FRAMEWORK RESEARCH: What project management approaches work best in higher ed?
+2. BEST PRACTICE RESEARCH: How do peer institutions handle complex, cross-functional projects?
+3. RISK RESEARCH: Common project failures in academic settings; how to avoid them?
+4. PROJECT ANALYSIS: Our project's unique challenges, stakeholder complexity, strategic importance
+5. RECOMMENDATION: Framework adapted to project and institutional context
+
+Research best practices and synthesize recommendations.
+
+FOR PERPLEXITY - TREE OF THOUGHT:
+Explore project management approaches:
+- Command-and-control vs. collaborative: Which works in higher ed? Examples?
+- Rapid vs. comprehensive planning: Trade-offs, success rates?
+- Traditional vs. agile: Higher ed adoption, effectiveness?
+- Governance models: Decision-making, escalation, risk management best practices?
+
+Research approaches and recommend framework.
+
+FOR PERPLEXITY - ACTIONABLE PROMPT:
+Research strategic project management frameworks in higher ed contexts. Then develop a project plan for [Project] using best-practice standards. Include: objective clarification, stakeholder analysis, scope definition, timeline with milestones, governance framework, risk register, and success metrics. Reference best-practice approaches.
+
+VALIDATION STATUS:
+✓ Role Alignment: Advanced project leadership with ambiguous scope
+✓ Platform Fit: Claude (complex planning), ChatGPT (step-by-step), Gemini (structured framework), Perplexity (best practice)
+✓ Clarity: Defined deliverables and success metrics
+✓ Completeness: Covers objectives, stakeholders, scope, governance, execution, risks
+✓ Reusability: Framework adaptable to different project types`
+            },
+            {
+                id: 9,
+                title: "CURRICULUM ASSISTANT",
+                complexity: "Intermediate",
+                useCaseCategory: "Curriculum Design Support & Documentation",
+                brief: "Support faculty in curriculum development, ensuring quality, alignment, and compliance",
+                outcome: "Curriculum design templates, alignment audit, and improvement recommendations",
+                metrics: ["Curriculum review efficiency 40% faster", "Alignment issues resolved 95%", "Faculty satisfaction >80%"],
+                challenge: "Challenge: Support faculty in curriculum development, ensuring quality, alignment, and compliance",
+                fullContent: `CURRICULUM ASSISTANT
+Complexity: Intermediate | Use Case: Curriculum Design Support & Documentation
+
+Challenge: Support faculty in curriculum development, ensuring quality, alignment, and compliance
+Outcome: Curriculum design templates, alignment audit, and improvement recommendations
+Metrics: Curriculum review efficiency 40% faster, alignment issues resolved 95%, faculty satisfaction >80%
+
+FOR CLAUDE - CHAIN OF THOUGHT:
+You are a curriculum support specialist. Examine curriculum development across: (1) Program Design—mission alignment, learning outcomes, coherence; (2) Course Alignment—course objectives match program outcomes, prerequisites logical; (3) Assessment—learning outcomes are measurable, assessed, and acted upon; (4) Currency—content current, pedagogy effective, resources adequate.
+
+For each dimension, identify strengths and gaps. Then build support sequentially: create design templates, develop alignment audit tools, establish assessment practices, facilitate continuous improvement. Show how to make faculty work easier while ensuring quality.
+
+Deliverable: Curriculum design toolkit with templates, audit tools, assessment guides, and improvement process.
+
+FOR CLAUDE - TREE OF THOUGHT:
+You are a curriculum designer. Explore three support approaches:
+
+Path A: Faculty-Driven—faculty design, assistant provides templates and feedback
+Path B: Collaborative—assistant co-designs with faculty, builds faculty capacity
+Path C: Compliance-Driven—assistant ensures alignment and assessment, guides improvement
+
+For each approach, evaluate: faculty ownership, quality assurance, implementation burden, and outcomes.
+
+Deliverable: Recommended support model with transition plan.
+
+FOR CLAUDE - ACTIONABLE PROMPT:
+Create a curriculum support system including: design templates for new/revised programs and courses, curriculum alignment audit tool, learning outcomes and assessment guide, accreditation compliance checklist, continuous improvement process, and faculty training/support materials.
+
+FOR CHATGPT - CHAIN OF THOUGHT:
+I support faculty curriculum development. Current challenges: [describe issues with curriculum alignment, learning outcomes, assessment, documentation].
+
+Step 1: What are faculty struggling with?—identify the biggest pain points
+Step 2: What's our current process?—how are curricula currently designed and reviewed?
+Step 3: What's missing?—templates, examples, guidance, standards?
+Step 4: What creates quality?—what distinguishes strong from weak curricula?
+Step 5: How do we build capacity?—training, resources, support for ongoing improvement?
+
+Design an improved support system.
+
+FOR CHATGPT - TREE OF THOUGHT:
+Supporting curriculum development. Let me think through:
+
+What if we made templates and examples available? How much does that help?
+What if we provided assessment guidance? What changes?
+What if we built in regular reviews? What would we learn?
+
+Explore ways to support faculty while ensuring quality.
+
+FOR CHATGPT - ACTIONABLE PROMPT:
+Create a curriculum support system for faculty including: program/course design templates with examples, curriculum alignment guide and audit tool, learning outcomes and assessment templates, accreditation compliance guide, and continuous improvement process. Include faculty orientation materials.
+
+FOR GEMINI - CHAIN OF THOUGHT:
+Curriculum Support System Module:
+
+INPUT: Faculty curriculum design needs, accreditation requirements, institutional standards, assessment expectations
+
+DESIGN SEQUENCE:
+1. Template Development—program, course, learning outcomes, assessment
+2. Alignment Framework—how to check program-course-outcome alignment
+3. Assessment Design—learning outcomes, assessment methods, data use
+4. Quality Standards—what characterizes strong curricula in disciplines
+5. Continuous Improvement—review cycle, feedback, iteration, evidence use
+
+OUTPUT: Comprehensive curriculum support toolkit with templates and guides
+
+FOR GEMINI - TREE OF THOUGHT:
+Curriculum Support Pathways:
+
+PATHWAY 1: Template-Based (self-service with templates)
+PATHWAY 2: Facilitated (assistant supports faculty through process)
+PATHWAY 3: Collaborative (co-design with faculty)
+PATHWAY 4: Integrated (system with training, tools, feedback loops)
+
+COMPARE: Faculty capacity building, quality assurance, scalability
+RECOMMEND: Integrated approach with phased rollout
+
+FOR GEMINI - ACTIONABLE PROMPT:
+Design a comprehensive curriculum support system including: design templates for programs/courses, learning outcomes guide, assessment framework, alignment audit tool, accreditation compliance checklist, continuous improvement process, and faculty training materials.
+
+FOR PERPLEXITY - CHAIN OF THOUGHT:
+Research curriculum design best practices and analyze institutional needs:
+
+1. FRAMEWORK RESEARCH: What are current best practices in curriculum design?
+2. OUTCOME RESEARCH: Learning outcomes and assessment best practices in higher ed?
+3. ACCREDITATION RESEARCH: Current compliance requirements and trends
+4. PEER ANALYSIS: How do peer institutions support curriculum development?
+5. RECOMMENDATION: Best practices synthesis adapted to institutional context
+
+Research best practices and synthesize recommendations.
+
+FOR PERPLEXITY - TREE OF THOUGHT:
+Explore curriculum support approaches:
+- Template-based vs. facilitated: Effectiveness, scalability, faculty autonomy?
+- Outcome-first vs. content-first: Alignment differences, best practice?
+- Assessment approaches: Types of valid assessment, data use best practices?
+- Accreditation alignment: How to build compliance into design process?
+
+Research approaches and recommend integrated system.
+
+FOR PERPLEXITY - ACTIONABLE PROMPT:
+Research higher ed curriculum design best practices and accreditation standards. Then create a curriculum support system for [Institution] including: design templates, alignment framework, assessment design guide, accreditation compliance guide, quality standards, continuous improvement process, and faculty development resources. Reference best practices.
+
+VALIDATION STATUS:
+✓ Role Alignment: Intermediate curriculum development support
+✓ Platform Fit: Claude (comprehensive toolkit), ChatGPT (faculty guidance), Gemini (structured templates), Perplexity (best practice)
+✓ Clarity: Actionable templates and tools with measurable outcomes
+✓ Completeness: Covers design, alignment, assessment, compliance, improvement
+✓ Reusability: Framework adaptable across disciplines and institutions`
+            },
+            {
+                id: 10,
+                title: "DISTANCE EDUCATION MANAGER",
+                complexity: "Intermediate",
+                useCaseCategory: "Program Development & Quality Assurance",
+                brief: "Develop and scale high-quality distance education programs while maintaining academic rigor",
+                outcome: "Distance program framework, quality standards, and launch roadmap",
+                metrics: ["Course completion rate >85%", "Student satisfaction >80%", "Academic quality maintained (assessment parity)"],
+                challenge: "Challenge: Develop and scale high-quality distance education programs while maintaining academic rigor",
+                fullContent: `DISTANCE EDUCATION MANAGER
+Complexity: Intermediate | Use Case: Program Development & Quality Assurance
+
+Challenge: Develop and scale high-quality distance education programs while maintaining academic rigor
+Outcome: Distance program framework, quality standards, and launch roadmap
+Metrics: Course completion rate >85%, student satisfaction >80%, academic quality maintained (assessment parity)
+
+FOR CLAUDE - CHAIN OF THOUGHT:
+You are a distance education strategist. Examine distance program development across: (1) Program Design—curriculum adapted for online, clear learning outcomes; (2) Student Support—advising, technical support, engagement tools; (3) Course Quality—faculty training, course design standards, student interaction; (4) Scale & Sustainability—infrastructure, faculty capacity, cost model.
+
+For each dimension, identify what's working and what needs improvement. Then build sequentially: develop design standards, create faculty onboarding, establish support systems, plan for scale. Show how to maintain academic rigor while creating effective online experiences.
+
+Deliverable: Distance education program framework with design standards, faculty development plan, student support system, and scale roadmap.
+
+FOR CLAUDE - TREE OF THOUGHT:
+You are a distance education designer. Explore three program development approaches:
+
+Path A: Conversion-Focused—convert existing courses to online, maximize reach quickly
+Path B: Redesign-Focused—rethink pedagogy for online, higher quality, slower scale
+Path C: Hybrid-Focused—blend online and in-person, flexibility, complex logistics
+
+For each approach, evaluate: time to market, quality outcomes, student experience, scalability.
+
+Deliverable: Recommended approach with phase breakdown and quality checkpoints.
+
+FOR CLAUDE - ACTIONABLE PROMPT:
+Create a distance education program framework including: program strategy and scope, curriculum/course design standards for online, faculty development and support plan, student support systems (advising, tech support, engagement), quality assurance process, infrastructure requirements, cost model, and 2-year scale roadmap.
+
+FOR CHATGPT - CHAIN OF THOUGHT:
+We're developing distance education programs. Current situation: [describe programs, enrollment goals, challenges, infrastructure, faculty readiness].
+
+Step 1: What works in distance education?—identify effective online practices
+Step 2: Where are we starting?—current capabilities, infrastructure, faculty skills
+Step 3: What are we trying to build?—program types, scale ambitions, quality targets
+Step 4: What could go wrong?—poor course design, lack of faculty preparation, inadequate student support
+Step 5: How do we launch successfully?—phased rollout, quality gates, faculty development, student support
+
+Create a detailed implementation plan.
+
+FOR CHATGPT - TREE OF THOUGHT:
+Planning distance education programs. Let me think through:
+
+What if we convert existing courses quickly? Benefits and risks?
+What if we completely redesign courses for online? What's the tradeoff?
+Could we do both—convert some, redesign others? How do we decide?
+
+Map the approach and quality requirements.
+
+FOR CHATGPT - ACTIONABLE PROMPT:
+Develop a distance education program implementation plan including: program strategy and target enrollment, course design standards for online learning, faculty development and support requirements, student support systems, quality assurance process, infrastructure needs, cost model, and 18-month rollout timeline.
+
+FOR GEMINI - CHAIN OF THOUGHT:
+Distance Education Program Development Module:
+
+INPUT: Program goals, current capabilities, faculty readiness, student populations, infrastructure
+
+DEVELOPMENT SEQUENCE:
+1. Program Strategy—target programs, enrollment goals, value proposition
+2. Design Standards—course structure, learning activities, student interaction, assessment
+3. Faculty Development—training, support, quality expectations, incentives
+4. Student Support—advising, technical support, engagement, retention
+5. Quality Assurance—course review, assessment, learning outcome verification
+6. Infrastructure & Scale—technology platform, staffing, resource plan
+
+OUTPUT: Distance education framework with implementation roadmap
+
+FOR GEMINI - TREE OF THOUGHT:
+Program Development Pathways:
+
+PATHWAY 1: Conversion (existing courses → online)
+PATHWAY 2: Redesign (rethink pedagogy for online)
+PATHWAY 3: Hybrid (blend online/in-person)
+PATHWAY 4: Native-Online (designed from scratch for online)
+
+MODEL: Quality, time to market, scalability, student experience for each
+RECOMMEND: Approach with quality checkpoints
+
+FOR GEMINI - ACTIONABLE PROMPT:
+Design a comprehensive distance education program framework including: strategy and scope, course design standards, faculty development plan, student support system, quality assurance process, technology infrastructure, resource plan, and 24-month implementation roadmap with quality gates.
+
+FOR PERPLEXITY - CHAIN OF THOUGHT:
+Research distance education best practices and analyze program requirements:
+
+1. EFFECTIVENESS RESEARCH: What makes distance education effective in higher ed?
+2. PROGRAM RESEARCH: How are peer institutions successfully delivering distance programs?
+3. STUDENT SUCCESS RESEARCH: What supports online student success and retention?
+4. FACULTY RESEARCH: How to prepare faculty for effective online teaching?
+5. RECOMMENDATION: Best practices synthesis adapted to program and institutional context
+
+Research best practices and synthesize recommendations.
+
+FOR PERPLEXITY - TREE OF THOUGHT:
+Explore distance education approaches:
+- Synchronous vs. asynchronous: Effectiveness, student preference, resource requirements?
+- Course conversion vs. redesign: Quality differences, timeline, faculty adoption?
+- Platform and tools: Best practice technology stack? Integration with student systems?
+- Quality assurance: How to maintain rigor in distance programs? Assessment parity?
+- Student support: What online student support is most effective?
+
+Research approaches and recommend integrated model.
+
+FOR PERPLEXITY - ACTIONABLE PROMPT:
+Research best practices in higher ed distance education, including student success factors, faculty development approaches, and quality assurance methods. Then develop a comprehensive distance program framework for [Institution] including: program strategy, design standards, faculty development, student support, quality metrics, technology infrastructure, and implementation roadmap. Reference best-practice data.
+
+VALIDATION STATUS:
+✓ Role Alignment: Intermediate program development and quality management
+✓ Platform Fit: Claude (strategic framework), ChatGPT (practical steps), Gemini (systematic design), Perplexity (best practice research)
+✓ Clarity: Measurable student outcomes and quality metrics
+✓ Completeness: Covers program design, faculty, students, quality, infrastructure, scale
+✓ Reusability: Framework adaptable to different program types and institution sizes`
+            },
+            {
+                id: 11,
+                title: "DIRECTOR, INTERNATIONAL EDUCATION",
+                complexity: "Advanced",
+                useCaseCategory: "Strategic Expansion & Program Development",
+                brief: "Develop international education strategy balancing growth, quality, compliance, and risk management",
+                outcome: "International strategy roadmap, program assessment, and market entry plan",
+                metrics: ["International enrollment growth 15-20%", "Program quality maintained", "Compliance 100%", "Partnership health >85%"],
+                challenge: "Challenge: Develop international education strategy balancing growth, quality, compliance, and risk management",
+                fullContent: `DIRECTOR, INTERNATIONAL EDUCATION
+Complexity: Advanced | Use Case: Strategic Expansion & Program Development
+
+Challenge: Develop international education strategy balancing growth, quality, compliance, and risk management
+Outcome: International strategy roadmap, program assessment, and market entry plan
+Metrics: International enrollment growth 15-20%, program quality maintained, compliance 100%, partnership health >85%
+
+FOR CLAUDE - CHAIN OF THOUGHT:
+You are an international education strategist. Examine current international programs across: (1) Market Opportunity—where are strong enrollment pipelines, what's competitor activity? (2) Program Portfolio—what programs work, where are gaps, quality consistency? (3) Partnerships—relationship health, effectiveness, revenue models; (4) Risk & Compliance—regulatory changes, institutional risk, student welfare.
+
+For each dimension, identify trends and vulnerabilities. Build strategy sequentially: identify markets to pursue, assess partnership opportunities, strengthen program quality, establish compliance frameworks. Show how to balance growth with risk management.
+
+Deliverable: 3-year international education strategy with market entry plan, partnership framework, program improvement roadmap, and risk mitigation plan.
+
+FOR CLAUDE - TREE OF THOUGHT:
+You are an international strategy designer. Explore three growth approaches:
+
+Path A: Depth-First—deepen existing markets and partnerships, build reputation, lower risk
+Path B: Breadth-First—enter new markets and partnerships rapidly, capture market share, higher risk
+Path C: Selective Growth—deepen strong markets, selectively enter new ones, balanced approach
+
+For each path, evaluate: growth potential, risk level, resource requirements, quality maintenance, and competitive positioning.
+
+Deliverable: Comparative market strategy with risk assessment.
+
+FOR CLAUDE - ACTIONABLE PROMPT:
+Create a 3-year international education strategy including: market analysis and opportunity assessment, target markets and programs, partnership framework and development plan, program quality and curriculum alignment strategy, student support and compliance plan, revenue model, risk assessment and mitigation, and implementation timeline with milestones.
+
+FOR CHATGPT - CHAIN OF THOUGHT:
+I direct international education and need to develop our strategy. Current state: [describe current programs, enrollment, partnerships, growth goals, concerns].
+
+Step 1: Where are we strong?—which markets, which programs work well?
+Step 2: Where are opportunities?—what markets have strong demand and fit our profile?
+Step 3: What's the challenge?—cost of entry, competition, regulatory, partnership quality?
+Step 4: What's our risk?—reputation damage from poor programs, compliance issues, partnership failure?
+Step 5: What's our growth path?—year 1, year 2, year 3 targets and focus?
+
+Create a strategic roadmap.
+
+FOR CHATGPT - TREE OF THOUGHT:
+Building international education strategy. Let me think through:
+
+What if we focused on deepening current markets? What would that achieve?
+What if we aggressively entered new markets? Pros and cons?
+What if we balanced both? How would we choose which markets to pursue?
+
+Map the strategy and risk implications.
+
+FOR CHATGPT - ACTIONABLE PROMPT:
+Develop a 3-year international education strategy including: market analysis and opportunity assessment, target market prioritization with entry strategy, partnership development plan, program quality and alignment strategy, student recruitment and support plan, compliance and risk management, revenue projections, and implementation roadmap with annual milestones.
+
+FOR GEMINI - CHAIN OF THOUGHT:
+International Education Strategy Module:
+
+INPUT: Current programs, partnerships, enrollment, market data, competitive landscape, institutional goals
+
+STRATEGY SEQUENCE:
+1. Market Analysis—opportunity assessment, competitive landscape, growth potential
+2. Portfolio Analysis—program performance, quality, sustainability, portfolio gaps
+3. Partnership Strategy—current relationship health, new partnership opportunities, models
+4. Compliance & Risk—regulatory landscape, student welfare, institutional risk, mitigation
+5. Growth Strategy—market prioritization, entry approach, program development, resources
+6. Implementation Plan—timeline, milestones, resource allocation, success metrics
+
+OUTPUT: Comprehensive international strategy with market roadmap
+
+FOR GEMINI - TREE OF THOUGHT:
+Growth Strategy Pathways:
+
+PATHWAY 1: Depth (strengthen existing markets and partnerships)
+PATHWAY 2: Breadth (enter new markets; expand portfolio)
+PATHWAY 3: Selective (deepen strength, selectively expand)
+PATHWAY 4: Transformation (significant portfolio change)
+
+MODEL: Growth potential, risk, resources, timeline for each
+RECOMMEND: Approach with phased milestones
+
+FOR GEMINI - ACTIONABLE PROMPT:
+Design a comprehensive 3-year international education strategy including: market and competitive analysis, target market prioritization and entry strategy, partnership development framework, program portfolio assessment and improvement plan, compliance and risk management system, revenue and resource model, and detailed implementation roadmap with decision gates.
+
+FOR PERPLEXITY - CHAIN OF THOUGHT:
+Research international education best practices and analyze institutional strategy:
+
+1. MARKET RESEARCH: What markets have strong demand for higher ed? Growth trends?
+2. PROGRAM RESEARCH: What international program models are most successful?
+3. PARTNERSHIP RESEARCH: Best practices in international partnerships; what works?
+4. COMPLIANCE RESEARCH: Regulatory landscape for international students and programs?
+5. PEER ANALYSIS: What are peer institutions' international strategies?
+6. RECOMMENDATION: Best practices synthesis adapted to institutional context and markets
+
+Research markets and practices; synthesize strategic recommendations.
+
+FOR PERPLEXITY - TREE OF THOUGHT:
+Explore international education strategies:
+- Depth vs. breadth: Market research on growth potential, competitive dynamics?
+- Partnership models: Joint programs vs. independent programs? Success rates?
+- Market entry: Gradual vs. rapid? Risk/return analysis?
+- Portfolio: What program types work internationally? Demand trends?
+- Compliance: Current regulatory environment? Risk mitigation?
+
+Research approaches and market data; recommend strategy.
+
+FOR PERPLEXITY - ACTIONABLE PROMPT:
+Research international higher ed market trends, program models, and peer institutional strategies. Then develop a 3-year international education strategy for [Institution] including: market analysis with growth potential, target markets, partnership approach, program strategy, compliance framework, revenue model, and implementation roadmap. Use current market data and research benchmarks.
+
+VALIDATION STATUS:
+✓ Role Alignment: Advanced strategic positioning and growth management
+✓ Platform Fit: Claude (complex strategy), ChatGPT (narrative planning), Gemini (systematic analysis), Perplexity (market research)
+✓ Clarity: Quantified growth targets and market priorities
+✓ Completeness: Covers markets, programs, partnerships, compliance, growth, risk
+✓ Reusability: Framework adaptable to different institutional profiles`
+            },
+            {
+                id: 12,
+                title: "DIRECTOR, FACULTY SERVICES",
+                complexity: "Intermediate",
+                useCaseCategory: "Service Strategy & Process Improvement",
+                brief: "Design integrated faculty services strategy addressing support, development, and satisfaction",
+                outcome: "Faculty services framework, service menu, and delivery model",
+                metrics: ["Faculty satisfaction >85%", "Service utilization 60%+", "Support effectiveness >80%"],
+                challenge: "Challenge: Design integrated faculty services strategy addressing support, development, and satisfaction",
+                fullContent: `DIRECTOR, FACULTY SERVICES
+Complexity: Intermediate | Use Case: Service Strategy & Process Improvement
+
+Challenge: Design integrated faculty services strategy addressing support, development, and satisfaction
+Outcome: Faculty services framework, service menu, and delivery model
+Metrics: Faculty satisfaction >85%, service utilization 60%+, support effectiveness >80%
+
+FOR CLAUDE - CHAIN OF THOUGHT:
+You are a faculty services strategist. Examine current services across: (1) Professional Development—teaching, research, career; (2) Operational Support—HR, finance, research administration; (3) Pedagogical Support—course design, technology, assessment; (4) Personal Support—wellness, work-life balance, community.
+
+For each category, identify what's offered, utilization rates, faculty satisfaction. Then design sequentially: clarify service offerings, improve communication, integrate delivery, measure impact. Show how to create value while managing costs.
+
+Deliverable: Faculty services framework with service menu, delivery model, communication strategy, and impact measurement plan.
+
+FOR CLAUDE - TREE OF THOUGHT:
+You are a faculty services designer. Explore three service delivery models:
+
+Path A: Decentralized—each unit offers services independently; tailored but inconsistent
+Path B: Centralized—single hub offers all services; consistent but may feel impersonal
+Path C: Hub-and-Spoke—central coordination with distributed delivery; balance approach
+
+For each model, evaluate: accessibility, consistency, faculty satisfaction, cost, and scalability.
+
+Deliverable: Recommended service delivery model with implementation approach.
+
+FOR CLAUDE - ACTIONABLE PROMPT:
+Create a comprehensive faculty services framework including: service menu by category (professional development, operational support, pedagogical support, personal support), delivery model (hub-and-spoke recommended), communication and outreach strategy, service utilization targets, impact measurement approach, and 18-month implementation roadmap.
+
+FOR CHATGPT - CHAIN OF THOUGHT:
+I direct faculty services and want to improve our impact. Current state: [describe services offered, faculty satisfaction, utilization, pain points].
+
+Step 1: What services do faculty actually use?—identify high-value offerings
+Step 2: What's missing or underutilized?—gaps in service or in awareness?
+Step 3: What's preventing uptake?—accessibility, relevance, communication, trust?
+Step 4: What would faculty value most?—survey results or intuition about priorities?
+Step 5: How do we organize delivery?—centralized, distributed, or hybrid approach?
+
+Create an improved service strategy.
+
+FOR CHATGPT - TREE OF THOUGHT:
+Improving faculty services. Let me think through:
+
+What if we offered more services but less personalized? What's the trade-off?
+What if we offered fewer services but more depth? Impact on satisfaction?
+What if we coordinated across silos? How would that improve faculty experience?
+
+Design an improved service model.
+
+FOR CHATGPT - ACTIONABLE PROMPT:
+Develop a faculty services improvement plan including: comprehensive service menu (professional development, operational support, pedagogical support, wellbeing), service delivery model, communication strategy to increase awareness and utilization, success metrics, and 12-month implementation roadmap with quarterly milestones.
+
+FOR GEMINI - CHAIN OF THOUGHT:
+Faculty Services Strategy Module:
+
+INPUT: Current services, faculty feedback, utilization data, satisfaction surveys, institutional priorities
+
+STRATEGY SEQUENCE:
+1. Service Portfolio Analysis—current offerings, utilization, satisfaction, gaps
+2. Faculty Needs Assessment—what matters most, unmet needs, priorities
+3. Service Design—menu of services, delivery modes, integration
+4. Delivery Model—hub-and-spoke vs. centralized vs. decentralized
+5. Communication & Outreach—how faculty learn about, access services
+6. Impact Measurement—utilization targets, satisfaction, outcome measurement
+
+OUTPUT: Faculty services framework with implementation roadmap
+
+FOR GEMINI - TREE OF THOUGHT:
+Service Delivery Pathways:
+
+PATHWAY 1: Centralized Hub (consistency, efficiency)
+PATHWAY 2: Distributed (personalization, accessibility)
+PATHWAY 3: Hub-and-Spoke (coordination + distribution)
+PATHWAY 4: Technology-Enabled (self-service with support)
+
+COMPARE: Accessibility, consistency, cost, scalability, faculty experience
+RECOMMEND: Hub-and-spoke with phased implementation
+
+FOR GEMINI - ACTIONABLE PROMPT:
+Design a comprehensive faculty services strategy including: service portfolio assessment and recommendations, target faculty needs and service menu, service delivery model, communication and marketing strategy, partnership and integration approach, utilization targets, impact metrics, and 18-month implementation roadmap.
+
+FOR PERPLEXITY - CHAIN OF THOUGHT:
+Research faculty services best practices and analyze institutional approach:
+
+1. BEST PRACTICE RESEARCH: What's best-in-class faculty services in higher ed?
+2. SERVICE RESEARCH: What services matter most to faculty? Trends?
+3. DELIVERY RESEARCH: How are peer institutions organizing faculty services?
+4. SATISFACTION RESEARCH: What drives faculty satisfaction with institutional support?
+5. BENCHMARKING: How do our services compare to peer institutions?
+6. RECOMMENDATION: Best practices synthesis adapted to our context
+
+Research best practices and benchmarks; synthesize recommendations.
+
+FOR PERPLEXITY - TREE OF THOUGHT:
+Explore faculty services approaches:
+- Centralized vs. distributed: Trade-offs, effectiveness data?
+- Service types: What matters most to faculty? Peer institution models?
+- Communication: What drives awareness and utilization?
+- Integration: How do successful institutions coordinate services?
+- Measurement: Success metrics for faculty services?
+
+Research approaches and best practices; recommend strategy.
+
+FOR PERPLEXITY - ACTIONABLE PROMPT:
+Research best practices in higher ed faculty services, faculty satisfaction drivers, and peer institution models. Then design a faculty services strategy for [Institution] including: comprehensive service menu, delivery model based on best practices, communication strategy, utilization targets, impact measurement, and implementation roadmap. Reference benchmark data.
+
+VALIDATION STATUS:
+✓ Role Alignment: Intermediate service strategy and faculty satisfaction
+✓ Platform Fit: Claude (strategic framework), ChatGPT (practical service design), Gemini (systematic planning), Perplexity (best practice research)
+✓ Clarity: Measurable satisfaction and utilization metrics
+✓ Completeness: Covers service portfolio, delivery, communication, measurement
+✓ Reusability: Framework adaptable to different service types and institutional sizes`
+            },
+            {
+                id: 13,
+                title: "FACULTY SERVICES, FULL-TIME",
+                complexity: "Basic",
+                useCaseCategory: "Service Delivery & Process Implementation",
+                brief: "Effectively deliver faculty services while managing multiple requests and maintaining service quality",
+                outcome: "Service delivery workflow and communication templates",
+                metrics: ["Service request response time <24 hours", "Satisfaction >85%", "Accuracy 98%"],
+                challenge: "Challenge: Effectively deliver faculty services while managing multiple requests and maintaining service quality",
+                fullContent: `FACULTY SERVICES, FULL-TIME
+Complexity: Basic | Use Case: Service Delivery & Process Implementation
+
+Challenge: Effectively deliver faculty services while managing multiple requests and maintaining service quality
+Outcome: Service delivery workflow and communication templates
+Metrics: Service request response time <24 hours, satisfaction >85%, accuracy 98%
+
+FOR CLAUDE - CHAIN OF THOUGHT:
+You are a faculty services representative. Daily work involves: (1) Request Intake—receiving requests from faculty for support; (2) Service Delivery—connecting faculty to resources, guidance, solutions; (3) Follow-up—ensuring satisfaction, tracking outcomes; (4) Documentation—recording what faculty needed and what we provided.
+
+For each task, identify best practices for efficiency and accuracy. Build workflow sequentially: streamlined intake process, quick triage to appropriate support, trackable follow-up, documentation that informs service improvement. Show how consistency and speed improve faculty experience.
+
+Deliverable: Service delivery workflow with templates, communication guides, and tracking system.
+
+FOR CLAUDE - TREE OF THOUGHT:
+You are a service process designer. Explore three service delivery approaches:
+
+Path A: High-Touch—personalized attention, strong relationships, time-intensive
+Path B: Efficient—streamlined processes, quick response, may feel transactional
+Path C: Balanced—warm responsiveness with efficient processes
+
+For each approach, evaluate: faculty satisfaction, time efficiency, accuracy, and sustainability.
+
+Deliverable: Recommended balanced approach with implementation guide.
+
+FOR CLAUDE - ACTIONABLE PROMPT:
+Create a faculty services delivery system including: intake form/process, triage and routing procedure, response template library (common requests), tracking/documentation system, follow-up process, and templates for service delivery across key areas (HR, finance, professional development, etc.).
+
+FOR CHATGPT - CHAIN OF THOUGHT:
+I deliver faculty services and manage a high volume of requests. Current challenges: [describe volume, common requests, response delays, quality issues].
+
+Step 1: What are the most common requests?—prioritize by frequency
+Step 2: What's causing delays?—bottlenecks in intake, response, or follow-up?
+Step 3: What can be templated?—standard responses for common questions?
+Step 4: What needs personal touch?—complex or sensitive requests?
+Step 5: How do we track and improve?—documentation and feedback system?
+
+Create a more efficient process.
+
+FOR CHATGPT - TREE OF THOUGHT:
+Improving faculty service delivery. Let me think through:
+
+What if we standardized intake? How much faster would we be?
+What if we templated common responses? What about quality and personalization?
+How do we balance efficiency with the warm, helpful service faculty expect?
+
+Design an improved process.
+
+FOR CHATGPT - ACTIONABLE PROMPT:
+Create a faculty services delivery workflow including: intake process (form, channels), triage procedure (categorizing requests), response templates for 10-15 common request types, tracking and follow-up system, and communication guidelines that balance efficiency with warmth and personalization.
+
+FOR GEMINI - CHAIN OF THOUGHT:
+Faculty Services Delivery Process Module:
+
+INPUT: Service types, request volume, response time targets, faculty expectations
+
+PROCESS DESIGN:
+1. Intake Design—channels, form, triage criteria
+2. Response Workflow—routing, resolution time, escalation
+3. Templates—common requests, standard responses, customization
+4. Tracking—request status, outcomes, satisfaction
+5. Quality Assurance—accuracy, completeness, timeliness
+
+OUTPUT: Service delivery workflow with templates and tracking system
+
+FOR GEMINI - TREE OF THOUGHT:
+Delivery Approach Pathways:
+
+PATHWAY 1: High-Touch (personalized, relationship-focused)
+PATHWAY 2: Efficient (streamlined, fast, may feel transactional)
+PATHWAY 3: Balanced (responsive + efficient)
+PATHWAY 4: Self-Service (templates + human support when needed)
+
+COMPARE: Satisfaction, efficiency, sustainability, scalability
+RECOMMEND: Balanced approach with self-service elements
+
+FOR GEMINI - ACTIONABLE PROMPT:
+Design a faculty services delivery system including: intake and triage process, response workflow by request type, response templates for common requests, tracking and documentation procedures, follow-up protocol, quality assurance measures, and communication guidelines.
+
+FOR PERPLEXITY - CHAIN OF THOUGHT:
+Research effective service delivery practices and analyze current approach:
+
+1. SERVICE BEST PRACTICES: What makes service delivery effective and efficient?
+2. COMMUNICATION RESEARCH: How to communicate with faculty that's both warm and efficient?
+3. WORKFLOW RESEARCH: Best practices for managing request intake, delivery, follow-up?
+4. TEMPLATE RESEARCH: What templates and systems help service efficiency?
+5. SATISFACTION RESEARCH: What drives faculty satisfaction with service staff?
+
+Research best practices; synthesize recommendations.
+
+FOR PERPLEXITY - TREE OF THOUGHT:
+Explore service delivery approaches:
+- High-touch vs. efficient: Trade-offs, satisfaction data?
+- Intake methods: Phone, email, form, portal? Best for different request types?
+- Response times: Benchmarks for different request types?
+- Templates: How to maintain personalization with templates?
+- Tracking: What systems support efficient tracking and follow-up?
+
+Research best practices and recommend approach.
+
+FOR PERPLEXITY - ACTIONABLE PROMPT:
+Research best practices in higher ed faculty services delivery. Then design a service delivery system for [Institution] including: optimized intake process, triage and routing procedures, response templates for common request types, tracking and follow-up system, communication guidelines that balance warmth with efficiency, and quality assurance measures. Reference best practices.
+
+VALIDATION STATUS:
+✓ Role Alignment: Basic service delivery and process management
+✓ Platform Fit: Claude (comprehensive workflow), ChatGPT (practical steps), Gemini (structured templates), Perplexity (best practice)
+✓ Clarity: Measurable response times and satisfaction metrics
+✓ Completeness: Covers intake, delivery, tracking, quality
+✓ Reusability: Process templates adaptable to different service types`
+            },
+            {
+                id: 14,
+                title: "FACULTY SERVICES, PART-TIME",
+                complexity: "Basic",
+                useCaseCategory: "Service Delivery & Coordination",
+                brief: "Provide focused faculty services support with limited hours while maintaining quality",
+                outcome: "Prioritized service delivery model and communication system",
+                metrics: ["High-priority requests handled 100%", "Satisfaction >80%", "Efficiency maximized"],
+                challenge: "Challenge: Provide focused faculty services support with limited hours while maintaining quality",
+                fullContent: `FACULTY SERVICES, PART-TIME
+Complexity: Basic | Use Case: Service Delivery & Coordination
+
+Challenge: Provide focused faculty services support with limited hours while maintaining quality
+Outcome: Prioritized service delivery model and communication system
+Metrics: High-priority requests handled 100%, satisfaction >80%, efficiency maximized
+
+FOR CLAUDE - CHAIN OF THOUGHT:
+You provide part-time faculty services. Work across: (1) Request Management—intake and triage; (2) Quick Wins—fast solutions to common issues; (3) Handoff—escalation to full-time staff or specialists; (4) Communication—keeping faculty informed, following up.
+
+For limited hours, build efficiency: identify highest-impact requests, create clear handoff procedures, empower faculty with self-service resources, ensure seamless coordination with full-time team. Show how to maximize impact despite limited availability.
+
+Deliverable: Part-time service delivery model with triage system, quick-win procedures, handoff protocols, and communication templates.
+
+FOR CLAUDE - TREE OF THOUGHT:
+You are a part-time service coordinator. Explore three service prioritization approaches:
+
+Path A: First-Come-First-Served—serve requests in order; fair, but may miss priorities
+Path B: Urgent-First—prioritize critical requests; effective, but requires quick assessment
+Path C: Impact-First—prioritize requests that unblock faculty work; strategic, but complex
+
+For each approach, evaluate: fairness, efficiency, faculty satisfaction, and workload.
+
+Deliverable: Recommended prioritization model with implementation guide.
+
+FOR CLAUDE - ACTIONABLE PROMPT:
+Create a part-time faculty services delivery model including: request triage and prioritization system, quick-win procedures for common requests, clear escalation/handoff protocols, communication templates, coordination system with full-time staff, and guidance on maximizing impact within limited hours.
+
+FOR CHATGPT - CHAIN OF THOUGHT:
+I provide part-time faculty services. I have [X hours/week] and need to maximize impact. Current approach: [describe work, challenges, response times].
+
+Step 1: What are our highest-impact requests?—focus time where it matters most
+Step 2: What can be quick wins?—requests we can handle completely in minutes?
+Step 3: What needs escalation?—requests beyond our scope or time availability?
+Step 4: How do we stay organized?—tracking system for limited hours?
+Step 5: How do we communicate?—setting expectations about availability and response time?
+
+Create an efficient delivery model.
+
+FOR CHATGPT - TREE OF THOUGHT:
+Managing limited-hour faculty services. Let me think through:
+
+What if we prioritize requests by urgency? Impact on faculty and workload?
+What if we focus on quick wins and escalate complex requests? How do we hand off?
+How do we communicate our limited availability without disappointing faculty?
+
+Design a realistic delivery model.
+
+FOR CHATGPT - ACTIONABLE PROMPT:
+Develop a part-time faculty services delivery model including: request triage and prioritization system for limited hours, quick-win procedures for high-frequency requests, clear escalation protocols, communication system managing expectations about availability, coordination procedures with full-time staff, and tracking system for accountability.
+
+FOR GEMINI - CHAIN OF THOUGHT:
+Part-Time Faculty Services Module:
+
+INPUT: Available hours, request types, overlap with full-time staff, institutional priorities
+
+DESIGN SEQUENCE:
+1. Prioritization Framework—urgency, impact, complexity assessment
+2. Quick-Win Procedures—common requests, scripted responses, minimal time
+3. Escalation Protocols—when to handoff, how to communicate, tracking
+4. Communication—managing availability expectations, response times, follow-up
+5. Coordination—handoff procedures, information sharing with full-time team
+
+OUTPUT: Part-time service delivery model with templates and procedures
+
+FOR GEMINI - TREE OF THOUGHT:
+Service Prioritization Pathways:
+
+PATHWAY 1: First-Come-First-Served
+PATHWAY 2: Urgent-First
+PATHWAY 3: Impact-First
+PATHWAY 4: Hybrid (urgent + high-impact + quick-wins)
+
+ASSESS: Time efficiency, faculty satisfaction, fairness, workload sustainability
+RECOMMEND: Hybrid approach with clear communication
+
+FOR GEMINI - ACTIONABLE PROMPT:
+Design a part-time faculty services delivery model including: prioritization framework for requests, quick-win procedures, escalation and handoff protocols, communication system for availability and response times, coordination procedures with full-time staff, and tracking system. Assume [X hours/week] availability.
+
+FOR PERPLEXITY - CHAIN OF THOUGHT:
+Research effective part-time service models and analyze role requirements:
+
+1. PART-TIME MODELS: How do successful part-time roles operate in higher ed?
+2. PRIORITIZATION RESEARCH: What prioritization models work for limited availability?
+3. HANDOFF RESEARCH: Best practices in coordinating part-time and full-time teams?
+4. COMMUNICATION RESEARCH: Setting expectations about limited availability?
+5. EFFICIENCY RESEARCH: Maximizing impact with constrained hours?
+
+Research best practices; synthesize recommendations.
+
+FOR PERPLEXITY - TREE OF THOUGHT:
+Explore part-time service approaches:
+- Prioritization: Urgency vs. impact vs. quick-wins? How to balance?
+- Communication: How to set expectations about limited availability?
+- Handoff: How to coordinate seamlessly with full-time staff?
+- Quick-wins: What requests can be handled completely in minutes?
+- Escalation: Clear criteria and procedures?
+
+Research approaches and recommend model.
+
+FOR PERPLEXITY - ACTIONABLE PROMPT:
+Research effective part-time roles in higher ed service teams. Then design a part-time faculty services role for [Institution] including: prioritization framework, quick-win procedures, escalation protocols, communication guidelines, coordination procedures with full-time staff, and tracking system. Assume [X hours/week] availability and reference best practices.
+
+VALIDATION STATUS:
+✓ Role Alignment: Basic part-time service delivery with capacity constraints
+✓ Platform Fit: Claude (comprehensive model), ChatGPT (practical prioritization), Gemini (structured procedures), Perplexity (best practice part-time roles)
+✓ Clarity: Clear prioritization and escalation criteria
+✓ Completeness: Covers triage, delivery, escalation, coordination
+✓ Reusability: Framework adaptable to different part-time contexts`
+            },
+            {
+                id: 15,
+                title: "REVENUE MANAGER",
+                complexity: "Advanced",
+                useCaseCategory: "Revenue Optimization & Financial Strategy",
+                brief: "Develop strategies to optimize revenue across tuition, fees, grants, and alternative sources",
+                outcome: "Revenue strategy with program-specific optimization and growth roadmap",
+                metrics: ["Revenue growth 5-10% annually", "Revenue diversity increased", "Revenue stability enhanced"],
+                challenge: "Challenge: Develop strategies to optimize revenue across tuition, fees, grants, and alternative sources",
+                fullContent: `REVENUE MANAGER
+Complexity: Advanced | Use Case: Revenue Optimization & Financial Strategy
+
+Challenge: Develop strategies to optimize revenue across tuition, fees, grants, and alternative sources
+Outcome: Revenue strategy with program-specific optimization and growth roadmap
+Metrics: Revenue growth 5-10% annually, revenue diversity increased, revenue stability enhanced
+
+FOR CLAUDE - CHAIN OF THOUGHT:
+You are a revenue strategist. Examine revenue streams across: (1) Tuition—enrollment trends, pricing strategy, discount rates; (2) Fees—all fee categories, effectiveness of fees; (3) Grants—grant funding pipelines, competitiveness; (4) Ancillary Revenue—housing, parking, conferences, other sources.
+
+For each stream, identify growth potential, vulnerabilities, and optimization opportunities. Build strategy sequentially: maximize tuition through enrollment and pricing optimization, grow grant funding through faculty support, develop alternative revenue, manage discounting to protect margins. Show revenue and profitability impacts.
+
+Deliverable: Comprehensive revenue strategy with optimization targets, program-specific recommendations, and financial projections.
+
+FOR CLAUDE - TREE OF THOUGHT:
+You are a revenue strategist. Explore three revenue growth approaches:
+
+Path A: Tuition-Focused—grow enrollment, optimize pricing, manage discounting
+Path B: Diversification-Focused—grow grants, ancillary revenue, alternative sources
+Path C: Optimization-Focused—improve margins and efficiency across all streams
+
+For each path, evaluate: growth potential, risk level, resource requirements, sustainability, and profitability.
+
+Deliverable: Comparative revenue strategy analysis.
+
+FOR CLAUDE - ACTIONABLE PROMPT:
+Create a comprehensive revenue strategy including: current revenue analysis by stream (tuition, fees, grants, ancillary), program-level revenue performance, optimization opportunities by stream, enrollment and pricing strategy, grant funding growth plan, alternative revenue development, financial projections (3-year), and implementation roadmap with quarterly targets.
+
+FOR CHATGPT - CHAIN OF THOUGHT:
+I manage revenue strategy. Current situation: [describe revenue sources, trends, pressures, growth goals].
+
+Step 1: Where's our revenue coming from?—breakdown by source and stability
+Step 2: Where's the growth potential?—which sources have room to grow?
+Step 3: Where are we vulnerable?—concentration risk, declining trends?
+Step 4: What can we optimize?—pricing, discounting, efficiency, new sources?
+Step 5: What's realistic?—growth targets, timeline, resource requirements?
+
+Create a revenue growth strategy.
+
+FOR CHATGPT - TREE OF THOUGHT:
+Growing institutional revenue. Let me think through:
+
+What if we focused on enrollment growth? What would tuition revenue gains be?
+What if we diversified revenue more? What new sources could we develop?
+What if we optimized pricing and discounting? How would that affect margins?
+
+Model different approaches and combinations.
+
+FOR CHATGPT - ACTIONABLE PROMPT:
+Develop a revenue optimization strategy including: current revenue analysis by source, growth opportunities for each source, enrollment and pricing strategy, grant funding growth plan, alternative revenue development, financial projections (3 years), resource requirements, and implementation roadmap with annual revenue targets.
+
+FOR GEMINI - CHAIN OF THOUGHT:
+Revenue Optimization Module:
+
+INPUT: Current revenue by source, program performance, market trends, strategic priorities, constraints
+
+ANALYSIS SEQUENCE:
+1. Revenue Analysis—current stream breakdown, trends, concentration
+2. Vulnerability Assessment—risk factors, declining trends, opportunities
+3. Market Analysis—competitive pricing, market demand, enrollment potential
+4. Optimization Opportunities—pricing, discounting, fee structure, new sources
+5. Strategy Development—growth path, resource allocation, financial impact
+6. Implementation Plan—timeline, targets, resource requirements, risk mitigation
+
+OUTPUT: Comprehensive revenue strategy with financial projections
+
+FOR GEMINI - TREE OF THOUGHT:
+Revenue Growth Pathways:
+
+PATHWAY 1: Tuition-Focused (enrollment and pricing optimization)
+PATHWAY 2: Diversification (grants, ancillary, alternative revenue)
+PATHWAY 3: Optimization (margins and efficiency across streams)
+PATHWAY 4: Integrated (combination of approaches)
+
+MODEL: Growth potential, margins, risk, resource requirements for each
+RECOMMEND: Integrated approach with prioritized initiatives
+
+FOR GEMINI - ACTIONABLE PROMPT:
+Design a comprehensive revenue strategy including: revenue stream analysis (current, trends, vulnerability), growth opportunity assessment, program-level revenue strategy, optimization initiatives by stream, pricing and enrollment strategy, grant funding growth plan, alternative revenue development, financial projections (3-5 years), and implementation roadmap with decision gates.
+
+FOR PERPLEXITY - CHAIN OF THOUGHT:
+Research revenue management best practices and analyze institutional situation:
+
+1. MARKET RESEARCH: Tuition trends, pricing strategies, enrollment patterns in higher ed
+2. REVENUE RESEARCH: Alternative revenue models, grant funding trends, best practices
+3. BENCHMARKING: Revenue mix and performance vs. peer institutions
+4. STRATEGY RESEARCH: How do peer institutions approach revenue optimization?
+5. DATA ANALYSIS: Our revenue performance vs. benchmarks and trends
+6. RECOMMENDATION: Best practices synthesis adapted to institutional context
+
+Research market trends and best practices; synthesize recommendations.
+
+FOR PERPLEXITY - TREE OF THOUGHT:
+Explore revenue strategies:
+- Tuition optimization: Pricing strategy, enrollment management, discount strategy?
+- Grant funding: How to increase grant competitiveness? Faculty support?
+- Ancillary revenue: What sources are peer institutions developing?
+- Revenue stability: How to reduce vulnerability to enrollment fluctuations?
+- Financial sustainability: What revenue mix supports long-term stability?
+
+Research strategies and best practices; recommend approach.
+
+FOR PERPLEXITY - ACTIONABLE PROMPT:
+Research higher ed revenue trends, pricing strategies, and alternative revenue models. Then develop a comprehensive revenue strategy for [Institution] using our current revenue data [provide]. Include: optimization opportunities by stream, pricing and enrollment strategy, growth targets, financial projections (3-5 years), risk assessment, and implementation roadmap. Reference benchmarked data and best practices.
+
+VALIDATION STATUS:
+✓ Role Alignment: Advanced revenue strategy and financial management
+✓ Platform Fit: Claude (complex optimization), ChatGPT (narrative strategy), Gemini (data analysis), Perplexity (market research)
+✓ Clarity: Quantified growth targets and financial projections
+✓ Completeness: Covers all revenue streams, optimization, growth, risk
+✓ Reusability: Framework adaptable to different institution types`
+            },
+            {
+                id: 16,
+                title: "HUMAN RESOURCES",
+                complexity: "Intermediate",
+                useCaseCategory: "Talent Strategy & HR Process Optimization",
+                brief: "Develop comprehensive HR strategy addressing recruitment, retention, development, and compliance",
+                outcome: "HR strategy with process improvements and talent development roadmap",
+                metrics: ["Recruitment efficiency +20%", "Retention rate >85%", "Employee satisfaction >80%", "Compliance 100%"],
+                challenge: "Challenge: Develop comprehensive HR strategy addressing recruitment, retention, development, and compliance",
+                fullContent: `HUMAN RESOURCES
+Complexity: Intermediate | Use Case: Talent Strategy & HR Process Optimization
+
+Challenge: Develop comprehensive HR strategy addressing recruitment, retention, development, and compliance
+Outcome: HR strategy with process improvements and talent development roadmap
+Metrics: Recruitment efficiency +20%, retention rate >85%, employee satisfaction >80%, compliance 100%
+
+FOR CLAUDE - CHAIN OF THOUGHT:
+You are an HR strategist. Examine HR across: (1) Recruitment—attracting quality candidates, hiring efficiency; (2) Retention—employee satisfaction, career development, turnover analysis; (3) Development—training, leadership development, succession planning; (4) Compliance—policies, legal requirements, risk management.
+
+For each area, identify challenges and opportunities. Build strategy sequentially: improve hiring process, create career pathways, invest in development, strengthen compliance. Show how each area connects (e.g., good development supports retention, clear policies support compliance).
+
+Deliverable: Comprehensive HR strategy with process improvements, development roadmap, and implementation timeline.
+
+FOR CLAUDE - TREE OF THOUGHT:
+You are an HR strategist. Explore three talent management approaches:
+
+Path A: Recruitment-First—invest heavily in hiring great people; quality focus
+Path B: Retention-First—invest in development and culture; stability focus
+Path C: Balanced—invest in both recruitment and retention; sustainability focus
+
+For each path, evaluate: organizational effectiveness, cost, retention impact, and culture.
+
+Deliverable: Recommended balanced approach with implementation roadmap.
+
+FOR CLAUDE - ACTIONABLE PROMPT:
+Create a comprehensive HR strategy including: recruitment and hiring process improvement, employee retention and engagement strategy, professional development and succession planning, HR policy review and compliance, organizational culture assessment, technology and systems improvements, resource requirements, and 18-month implementation roadmap.
+
+FOR CHATGPT - CHAIN OF THOUGHT:
+I lead HR and need to develop our strategy. Current situation: [describe turnover, hiring challenges, employee satisfaction, development gaps, compliance concerns].
+
+Step 1: Where's the biggest HR challenge?—retention, recruitment, development, compliance?
+Step 2: What are we doing well?—build on strengths
+Step 3: What's broken?—identify key problems
+Step 4: What's achievable?—realistic improvements given resources
+Step 5: What's the roadmap?—year 1, year 2, year 3 improvements?
+
+Create a strategic HR plan.
+
+FOR CHATGPT - TREE OF THOUGHT:
+Developing HR strategy. Let me think through:
+
+What if we focused on hiring better people? What would that require and achieve?
+What if we focused on developing existing staff? How would that affect retention?
+What if we did both? How do we balance recruitment and development investments?
+
+Design an integrated HR strategy.
+
+FOR CHATGPT - ACTIONABLE PROMPT:
+Develop a comprehensive HR strategy including: recruitment and hiring process improvements, employee retention and engagement initiatives, professional development and succession planning, HR policy review, organizational culture strategy, compliance audit and improvement, technology needs, and 18-month implementation roadmap with annual milestones.
+
+FOR GEMINI - CHAIN OF THOUGHT:
+HR Strategy Module:
+
+INPUT: Current HR metrics, recruitment/retention data, employee feedback, policy/compliance gaps, organizational priorities
+
+STRATEGY SEQUENCE:
+1. Recruitment Assessment—process effectiveness, time-to-hire, quality, competitiveness
+2. Retention Analysis—turnover rates, exit data, retention drivers, gaps
+3. Development Assessment—current offerings, participation, effectiveness, gaps
+4. Compliance Audit—policy review, legal requirements, risk assessment
+5. Culture Assessment—organizational culture survey, alignment with strategy
+6. Strategy Development—improvement priorities, resource allocation, timeline
+
+OUTPUT: Comprehensive HR strategy with implementation roadmap
+
+FOR GEMINI - TREE OF THOUGHT:
+Talent Management Pathways:
+
+PATHWAY 1: Recruitment-Focused (hire great people)
+PATHWAY 2: Retention-Focused (develop existing talent)
+PATHWAY 3: Balanced (recruitment + retention)
+PATHWAY 4: Integrated (recruitment + retention + development + culture)
+
+ASSESS: Organizational effectiveness, cost, sustainability, cultural impact
+RECOMMEND: Integrated approach with phased implementation
+
+FOR GEMINI - ACTIONABLE PROMPT:
+Design a comprehensive HR strategy including: recruitment and hiring process improvement, employee retention and engagement strategy, professional development and succession planning, organizational culture strategy, HR policy and compliance review, technology and systems improvements, and 24-month implementation roadmap with resource allocation.
+
+FOR PERPLEXITY - CHAIN OF THOUGHT:
+Research HR best practices and analyze institutional HR situation:
+
+1. BEST PRACTICE RESEARCH: What are best practices in higher ed HR strategy?
+2. RECRUITMENT RESEARCH: Effective recruitment strategies, employer branding
+3. RETENTION RESEARCH: What drives employee retention? Best practice initiatives?
+4. DEVELOPMENT RESEARCH: Effective professional development and career pathways
+5. BENCHMARKING: HR metrics vs. peer institutions and best practices
+6. RECOMMENDATION: Best practices synthesis adapted to institutional context
+
+Research best practices and benchmark data; synthesize recommendations.
+
+FOR PERPLEXITY - TREE OF THOUGHT:
+Explore HR strategies:
+- Recruitment: Best practices, employer branding, hiring process optimization?
+- Retention: Career pathways, development, culture, compensation trade-offs?
+- Development: Training types, succession planning, leadership development?
+- Culture: What drives engagement? Peer institution approaches?
+- Compliance: Current regulatory landscape? Risk management?
+
+Research approaches and best practices; recommend strategy.
+
+FOR PERPLEXITY - ACTIONABLE PROMPT:
+Research higher ed HR best practices and benchmarked metrics. Then develop a comprehensive HR strategy for [Institution] using our current HR data [provide]. Include: recruitment and hiring optimization, retention and engagement strategy, professional development roadmap, succession planning, compliance assessment, organizational culture strategy, and implementation roadmap. Reference best-practice benchmarks.
+
+VALIDATION STATUS:
+✓ Role Alignment: Intermediate talent and HR strategy
+✓ Platform Fit: Claude (comprehensive strategy), ChatGPT (practical implementation), Gemini (systematic analysis), Perplexity (best practice research)
+✓ Clarity: Measurable recruitment, retention, and satisfaction metrics
+✓ Completeness: Covers recruitment, retention, development, compliance, culture
+✓ Reusability: Framework adaptable to different institutional sizes`
+            }
+        ];
+
+        let filteredRoles = rolesData;
+        let currentViewMode = 'grid';
+
+        function renderRoles() {
+            const grid = document.getElementById('rolesGrid');
+            const noResults = document.getElementById('noResults');
+            const count = document.getElementById('rolesCount');
+            
+            grid.innerHTML = '';
+            
+            if (filteredRoles.length === 0) {
+                grid.style.display = 'none';
+                noResults.style.display = 'block';
+            } else {
+                grid.style.display = 'grid';
+                noResults.style.display = 'none';
+                
+                filteredRoles.forEach(role => {
+                    const card = createRoleCard(role);
+                    grid.appendChild(card);
+                });
+            }
+            
+            count.textContent = filteredRoles.length;
+        }
+
+        function createRoleCard(role) {
+            const card = document.createElement('div');
+            card.className = 'role-card';
+            
+            const complexityClass = `complexity-${role.complexity.toLowerCase()}`;
+            
+            card.innerHTML = `
+                <div class="role-header">
+                    <div class="role-number">ROLE ${role.id}</div>
+                    <div class="role-title">${role.title}</div>
+                    <div class="role-meta">
+                        <span class="badge ${complexityClass}">${role.complexity}</span>
+                    </div>
+                </div>
+                <div class="role-content">
+                    <div class="brief-section">
+                        <div class="brief-label">Challenge</div>
+                        <div class="brief-text">${role.brief}</div>
+                    </div>
+                    <div class="brief-section">
+                        <div class="brief-label">Outcome</div>
+                        <div class="brief-text">${role.outcome}</div>
+                    </div>
+                    <div class="metrics">
+                        <div class="brief-label">Metrics</div>
+                        ${role.metrics.map(m => `<div class="metric-item"><span class="metric-dot">•</span> ${m}</div>`).join('')}
+                    </div>
+                    <button class="expand-button" onclick="openModal(${role.id})">View Full Details</button>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function openModal(roleId) {
+            const role = rolesData.find(r => r.id === roleId);
+            if (!role) return;
+            
+            const modal = document.getElementById('roleModal');
+            const title = document.getElementById('modalTitle');
+            const meta = document.getElementById('modalMeta');
+            const body = document.getElementById('modalBody');
+            
+            title.textContent = `${role.title}`;
+            meta.innerHTML = `<span class="badge complexity-${role.complexity.toLowerCase()}">${role.complexity}</span>`;
+            
+            body.innerHTML = `
+                <div style="line-height: 1.8; color: #333;">
+                    ${role.fullContent.split('\n\n').map(para => {
+                        if (para.startsWith('FOR')) {
+                            return `<div class="prompt-version">
+                                <div class="version-header" onclick="toggleVersion(this)">
+                                    <span>${para.split('-')[0].trim()}</span>
+                                    <span class="version-toggle">▼</span>
+                                </div>
+                                <div class="version-content">
+                                    ${para.split('-').slice(1).join('-').trim().split('\n').map(line => `<div>${line}</div>`).join('')}
+                                </div>
+                            </div>`;
+                        } else if (para.startsWith('✓')) {
+                            return `<div class="validation-status" style="margin-top: 20px;">${para.split('✓').slice(1).map(item => `<div class="validation-item"><span class="check-mark">✓</span> ${item.trim()}</div>`).join('')}</div>`;
+                        } else {
+                            return `<p style="margin-bottom: 12px;">${para}</p>`;
+                        }
+                    }).join('')}
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('roleModal').classList.remove('active');
+        }
+
+        function toggleVersion(element) {
+            const toggle = element.querySelector('.version-toggle');
+            const content = element.nextElementSibling;
+            content.classList.toggle('open');
+            toggle.classList.toggle('open');
+        }
+
+        function filterRoles() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const complexity = document.getElementById('complexityFilter').value;
+            
+            filteredRoles = rolesData.filter(role => {
+                const matchesSearch = role.title.toLowerCase().includes(search) || 
+                                    role.brief.toLowerCase().includes(search) ||
+                                    role.useCaseCategory.toLowerCase().includes(search);
+                const matchesComplexity = !complexity || role.complexity === complexity;
+                return matchesSearch && matchesComplexity;
+            });
+            
+            renderRoles();
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('complexityFilter').value = '';
+            filteredRoles = rolesData;
+            renderRoles();
+        }
+
+        function toggleViewMode() {
+            currentViewMode = currentViewMode === 'grid' ? 'list' : 'grid';
+            const grid = document.getElementById('rolesGrid');
+            if (currentViewMode === 'list') {
+                grid.style.gridTemplateColumns = '1fr';
+            } else {
+                grid.style.gridTemplateColumns = 'repeat(auto-fill, minmax(330px, 1fr))';
+            }
+        }
+
+        document.getElementById('searchInput').addEventListener('keyup', filterRoles);
+        document.getElementById('complexityFilter').addEventListener('change', filterRoles);
+        document.getElementById('roleModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        renderRoles();
+    </script>
+</body>
+</html>
